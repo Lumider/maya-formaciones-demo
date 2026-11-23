@@ -28,6 +28,34 @@ export interface GrupoDesglose {
   lineas: { concepto: string; monto: number }[]
 }
 
+export type Intencion = 'quiere' | 'aunNoDecide' | 'noRegistro'
+
+/** Variables que definen si una candidata o emprendedora "cumple". */
+export interface Metricas {
+  ventaGP: number
+  activas: number
+  pped: number
+}
+
+/** Candidata del grupo de una Directora Junior o Senior (Parte B). */
+export interface Candidata extends Metricas {
+  id: string
+  nombre: string
+  nivel: NivelId
+  intencion: Intencion
+  /** Sueño registrado (clave de CONFIG.suenos.segundaPersona); solo si quiere ser Directora. */
+  sueno?: string
+  /** Si se indica, la candidata solo aparece para esos perfiles. */
+  soloPara?: Sigla[]
+}
+
+export interface Ascenso {
+  titulo: string
+  desde: string
+  hacia: string
+  beneficios: string[]
+}
+
 export interface Perfil {
   sigla: Sigla
   grupo: Grupo
@@ -73,7 +101,15 @@ export const CONFIG = {
     simuladorUrl: 'https://example.com/simulador-carrera',
     /** TODO: URL real del simulador de formación. */
     simuladorDirUrl: 'https://example.com/simulador-formacion',
+    /** Texto corto con el que se muestra el enlace a Mi carrera en los mensajes. TODO: enlace real. */
+    linkMiCarrera: 'maya.yanbal.com/mi-carrera',
   },
+
+  /** Bono de formación: siempre "S/750". Nunca va en mensajes a candidatas o emprendedoras. */
+  bonoFormacion: 750,
+
+  /** Umbrales de "cumple": los mismos para la vista de Directora y la de Líderes. */
+  umbrales: { ventaGP: 15000, activas: 10, pped: 3 } satisfies Metricas as Metricas,
 
   legales: {
     ganancia: '*Ganancia estimada referencial por campaña (4 semanas).',
@@ -86,6 +122,14 @@ export const CONFIG = {
     maxCaracteresOtro: 40,
     /** TODO: definir si el monto es obligatorio. */
     montoObligatorio: false,
+    /** El mismo sueño dicho en segunda persona, para los mensajes de la Directora. */
+    segundaPersona: {
+      'Comprar mi casa': 'comprar tu casa',
+      'Universidad de mis hijos': 'pagar la universidad de tus hijos',
+      'Viajar en familia': 'viajar en familia',
+      'Tener mi negocio': 'tener tu negocio',
+      'Pagar estudios': 'pagar tus estudios',
+    } as Record<string, string>,
   },
 
   /** Camino de carrera, de menor a mayor. */
@@ -210,13 +254,13 @@ export const CONFIG = {
       gananciaActual: 2390,
       campana: { ventaGP: 18900, activasGrupo: 24, deudaActual: 120, creditoYanbal: 807, ventaPersonal: 800 },
       desglose: [
-        { titulo: 'Comisión de Grupo Personal', lineas: [{ concepto: 'Comisión por venta de Grupo Personal', monto: 1900 }] },
-        { titulo: 'Mi Venta Personal', lineas: [{ concepto: 'Escala del 30% dto.', monto: 200 }] },
+        { titulo: 'Mi Venta Personal', lineas: [{ concepto: 'Honorarios 8%', monto: 2200 }] },
+        { titulo: 'Venta Personal', lineas: [{ concepto: 'Escala 25% dto.', monto: 50 }] },
         {
           titulo: 'Mis Premios',
           lineas: [
-            { concepto: 'Microondas Oster', monto: 190 },
-            { concepto: 'Wafflera Oster', monto: 100 },
+            { concepto: 'Microondas Oster', monto: 100 },
+            { concepto: 'Wafflera Oster', monto: 40 },
           ],
         },
       ],
@@ -228,13 +272,14 @@ export const CONFIG = {
       gananciaActual: 3400,
       campana: { ventaGP: 24500, activasGrupo: 31, deudaActual: 120, creditoYanbal: 807, ventaPersonal: 800 },
       desglose: [
-        { titulo: 'Comisión de Grupo Personal', lineas: [{ concepto: 'Comisión por venta de Grupo Personal', monto: 2600 }] },
-        { titulo: 'Ganancia por hijas Directoras', lineas: [{ concepto: 'Comisión por 1 hija Directora', monto: 500 }] },
+        { titulo: 'Mi Venta Personal', lineas: [{ concepto: 'Honorarios 8%', monto: 2700 }] },
+        { titulo: 'Ganancia por hijas Directoras', lineas: [{ concepto: 'Comisión 5% por 1 hija Directora', monto: 500 }] },
+        { titulo: 'Venta Personal', lineas: [{ concepto: 'Escala 25% dto.', monto: 60 }] },
         {
           titulo: 'Mis Premios',
           lineas: [
-            { concepto: 'Microondas Oster', monto: 200 },
-            { concepto: 'Wafflera Oster', monto: 100 },
+            { concepto: 'Microondas Oster', monto: 100 },
+            { concepto: 'Wafflera Oster', monto: 40 },
           ],
         },
       ],
@@ -257,6 +302,58 @@ export const CONFIG = {
       desglose: [],
     },
   } satisfies Record<Sigla, Perfil> as Record<Sigla, Perfil>,
+
+  /** Bloque de ascenso del popup del bono, por perfil. TODO: validar porcentajes y reglas. */
+  ascensos: {
+    JNR: {
+      titulo: 'Forma 1 Directora y asciende a Directora Senior.',
+      desde: 'Directora Junior',
+      hacia: 'Directora Senior',
+      beneficios: [
+        'Ganas 5% por tus hijas Directoras (hoy 4.5%)',
+        'Empiezas a ganar por tus nietas Directoras (0.3%)',
+        'Quedas a 2 formaciones de Super Senior',
+      ],
+    },
+    SNR: {
+      titulo: 'Forma 2 Directoras más y asciende a Super Senior.',
+      desde: 'Directora Senior',
+      hacia: 'Directora Super Senior',
+      beneficios: [
+        'Ganas 5.5% por tus hijas Directoras (hoy 5%)',
+        'Ganas 0.5% por tus nietas Directoras (hoy 0.3%)',
+        'Accedes al programa de auto',
+      ],
+    },
+  } as Partial<Record<Sigla, Ascenso>>,
+
+  /** Textos de la Parte B que dependen de la primera variable que la candidata no cumple. */
+  faltantes: {
+    pped: {
+      aviso: 'Le faltan primeros pedidos: motívala a incorporar esta campaña.',
+      mensaje: 'sumar primeros pedidos',
+    },
+    activas: {
+      aviso: 'Le faltan activas: ayúdala a reactivar a su grupo.',
+      mensaje: 'sumar activas en tu grupo',
+    },
+    ventaGP: {
+      aviso: 'Le falta venta de grupo: revisen juntas su plan de campaña.',
+      mensaje: 'subir la venta de tu grupo',
+    },
+  } satisfies Record<keyof Metricas, { aviso: string; mensaje: string }>,
+
+  /** Candidatas del Grupo Personal de las Directoras Junior y Senior. */
+  candidatas: [
+    { id: 'luciana-grande', nombre: 'Luciana Grande', nivel: 'cemSenior', ventaGP: 21200, activas: 10, pped: 7, intencion: 'quiere', sueno: 'Comprar mi casa' },
+    { id: 'maria-ramos', nombre: 'María Ramos', nivel: 'cemSenior', ventaGP: 15200, activas: 10, pped: 2, intencion: 'quiere', sueno: 'Pagar estudios' },
+    { id: 'diego-vasquez', nombre: 'Diego Vásquez', nivel: 'cem', ventaGP: 15200, activas: 10, pped: 2, intencion: 'quiere', sueno: 'Tener mi negocio' },
+    { id: 'carolina-rios', nombre: 'Carolina Ríos', nivel: 'consultora', ventaGP: 5200, activas: 0, pped: 3, intencion: 'quiere', sueno: 'Viajar en familia' },
+    { id: 'elena-paz', nombre: 'Elena Paz', nivel: 'cemSenior', ventaGP: 18500, activas: 22, pped: 3, intencion: 'noRegistro' },
+    { id: 'rosa-medina', nombre: 'Rosa Medina', nivel: 'cemSenior', ventaGP: 17500, activas: 20, pped: 3, intencion: 'noRegistro' },
+    { id: 'patricia-solis', nombre: 'Patricia Solís', nivel: 'cemSenior', ventaGP: 19800, activas: 12, pped: 5, intencion: 'quiere', sueno: 'Pagar estudios', soloPara: ['SNR'] },
+    { id: 'carmen-vela', nombre: 'Carmen Vela', nivel: 'cemSenior', ventaGP: 18900, activas: 11, pped: 4, intencion: 'quiere', sueno: 'Tener mi negocio', soloPara: ['SNR'] },
+  ] as Candidata[],
 
   /** Agrupación de los botones del panel "Ver como". */
   verComo: [

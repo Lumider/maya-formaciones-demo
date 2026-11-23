@@ -4,9 +4,11 @@ import { Cabecera } from './components/Cabecera'
 import { CapaContexto } from './components/Capa'
 import { NavInferior } from './components/NavInferior'
 import { VerComo } from './components/VerComo'
+import { ChatCandidata } from './screens/ChatCandidata'
 import { ChatDirectora } from './screens/ChatDirectora'
 import { ConfigScreen } from './screens/ConfigScreen'
 import { FlujoCarrera } from './screens/flujo/FlujoCarrera'
+import { Formaciones } from './screens/formaciones/Formaciones'
 import { Home } from './screens/Home'
 import { MiCarrera } from './screens/MiCarrera'
 import { MiNegocio } from './screens/MiNegocio'
@@ -35,14 +37,16 @@ export default function App() {
     )
   }
 
-  const enChat = ruta === RUTAS.chatDirectora
+  const enChat = ruta.startsWith('/chat/')
   const conNav = perfil.grupo !== 'lider' && !enChat
 
   return (
     <div className="app">
       <CapaContexto.Provider value={capa}>
-        {enChat ? (
+        {ruta === RUTAS.chatDirectora ? (
           <ChatDirectora />
+        ) : ruta.startsWith(RUTAS.chatCandidata) ? (
+          <ChatCandidata id={ruta.slice(RUTAS.chatCandidata.length)} />
         ) : (
           <>
             <Cabecera />
@@ -76,7 +80,7 @@ function Pantalla({ ruta }: { ruta: string }) {
     case RUTAS.miCarrera:
       return <MiCarrera />
     case RUTAS.formaciones:
-      return <Placeholder titulo="Formaciones" detalle="Se construye en la etapa 2 (Parte B · Directoras)." />
+      return <Formaciones />
     default:
       return <Home />
   }

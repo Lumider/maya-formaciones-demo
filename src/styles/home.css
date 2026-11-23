@@ -232,3 +232,22 @@
   display: flex;
   gap: 24px;
 }
+
+/* Banner "Formaciones" (Directoras): ilustración dentro de un círculo blanco */
+.anuncio__circulo {
+  position: absolute;
+  left: 192px;
+  top: 16px;
+  width: 104px;
+  height: 104px;
+  overflow: hidden;
+  border-radius: 50%;
+  background: #fff;
+}
+.anuncio__circulo img {
+  position: absolute;
+  left: -6.19%;
+  top: 3.81%;
+  width: 95.24%;
+  height: 95.24%;
+}

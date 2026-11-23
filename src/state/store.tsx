@@ -1,6 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useReducer, type ReactNode } from 'react'
 import { CONFIG, esSigla, type Perfil, type Sigla } from '../config/demo.config'
 import type { Sueno } from '../domain/carrera'
+import type { FiltroFormaciones } from '../domain/formaciones'
 
 const CLAVE = 'maya-formaciones-demo:v1'
 
@@ -23,9 +24,10 @@ export interface EstadoPerfil {
   /** Mensajes enviados por chat simulado (clave = id del chat). */
   chats: Record<string, MensajeEnviado[]>
   popupBonoVisto: boolean
+  filtroFormaciones: FiltroFormaciones
 }
 
-const PERFIL_VACIO: EstadoPerfil = { sueno: null, chats: {}, popupBonoVisto: false }
+const PERFIL_VACIO: EstadoPerfil = { sueno: null, chats: {}, popupBonoVisto: false, filtroFormaciones: 'listas' }
 
 interface Persistido {
   sesion: Sesion | null
@@ -38,6 +40,8 @@ export type Flujo = null | { paso: 'beneficios' | 'sueno' | 'confirmacion'; edit
 
 interface Estado extends Persistido {
   flujo: Flujo
+  /** Popup del bono de formación abierto (Parte B). */
+  popupBono: boolean
   hojasAbiertas: number
   aviso: { id: number; texto: string } | null
 }
@@ -49,22 +53,24 @@ type Accion =
   | { tipo: 'flujo'; flujo: Flujo }
   | { tipo: 'guardarSueno'; sueno: Sueno }
   | { tipo: 'enviarMensaje'; chat: string; mensaje: MensajeEnviado }
+  | { tipo: 'popupBono'; abierto: boolean }
+  | { tipo: 'filtroFormaciones'; filtro: FiltroFormaciones }
   | { tipo: 'hoja'; delta: 1 | -1 }
   | { tipo: 'aviso'; texto: string | null }
 
 function editarPerfil(estado: Estado, cambio: (p: EstadoPerfil) => EstadoPerfil): Estado {
-  const actual = estado.porPerfil[estado.perfil] ?? PERFIL_VACIO
+  const actual = { ...PERFIL_VACIO, ...estado.porPerfil[estado.perfil] }
   return { ...estado, porPerfil: { ...estado.porPerfil, [estado.perfil]: cambio(actual) } }
 }
 
 function reductor(estado: Estado, accion: Accion): Estado {
   switch (accion.tipo) {
     case 'iniciar':
-      return { ...estado, sesion: accion.sesion, perfil: accion.perfil, flujo: null }
+      return { ...estado, sesion: accion.sesion, perfil: accion.perfil, flujo: null, popupBono: false }
     case 'reiniciar':
       return { ...estadoInicial(false), perfil: estado.perfil }
     case 'cambiarPerfil':
-      return { ...estado, perfil: accion.perfil, flujo: null }
+      return { ...estado, perfil: accion.perfil, flujo: null, popupBono: false }
     case 'flujo':
       return { ...estado, flujo: accion.flujo }
     case 'guardarSueno':
@@ -74,6 +80,13 @@ function reductor(estado: Estado, accion: Accion): Estado {
         ...p,
         chats: { ...p.chats, [accion.chat]: [...(p.chats[accion.chat] ?? []), accion.mensaje] },
       }))
+    case 'popupBono':
+      // Al abrirse queda marcado como visto para ese perfil.
+      return accion.abierto
+        ? { ...editarPerfil(estado, (p) => ({ ...p, popupBonoVisto: true })), popupBono: true }
+        : { ...estado, popupBono: false }
+    case 'filtroFormaciones':
+      return editarPerfil(estado, (p) => ({ ...p, filtroFormaciones: accion.filtro }))
     case 'hoja':
       return { ...estado, hojasAbiertas: Math.max(0, estado.hojasAbiertas + accion.delta) }
     case 'aviso':
@@ -102,6 +115,7 @@ function estadoInicial(usarGuardado = true): Estado {
     perfil: esSigla(como) ? como : (guardado?.perfil ?? 'CEM'),
     porPerfil: guardado?.porPerfil ?? {},
     flujo: null,
+    popupBono: false,
     hojasAbiertas: 0,
     aviso: null,
   }
@@ -116,6 +130,7 @@ interface Demo {
   /** Directora madre de las Emprendedoras (configurada o la del config). */
   directoraMadre: string
   flujo: Flujo
+  popupBono: boolean
   hayHojaAbierta: boolean
   aviso: Estado['aviso']
   iniciar(sesion: Sesion, perfil: Sigla): void
@@ -125,6 +140,9 @@ interface Demo {
   cerrarFlujo(): void
   guardarSueno(sueno: Sueno): void
   enviarMensaje(chat: string, mensaje: MensajeEnviado): void
+  abrirPopupBono(): void
+  cerrarPopupBono(): void
+  elegirFiltroFormaciones(filtro: FiltroFormaciones): void
   registrarHoja(delta: 1 | -1): void
   avisar(texto: string | null): void
 }
@@ -156,6 +174,12 @@ export function DemoProvider({ children }: { children: ReactNode }) {
     (chat: string, mensaje: MensajeEnviado) => despachar({ tipo: 'enviarMensaje', chat, mensaje }),
     [],
   )
+  const abrirPopupBono = useCallback(() => despachar({ tipo: 'popupBono', abierto: true }), [])
+  const cerrarPopupBono = useCallback(() => despachar({ tipo: 'popupBono', abierto: false }), [])
+  const elegirFiltroFormaciones = useCallback(
+    (filtro: FiltroFormaciones) => despachar({ tipo: 'filtroFormaciones', filtro }),
+    [],
+  )
   const registrarHoja = useCallback((delta: 1 | -1) => despachar({ tipo: 'hoja', delta }), [])
   const avisar = useCallback((texto: string | null) => despachar({ tipo: 'aviso', texto }), [])
 
@@ -164,9 +188,10 @@ export function DemoProvider({ children }: { children: ReactNode }) {
       sesion: estado.sesion,
       sigla: estado.perfil,
       perfil: CONFIG.perfiles[estado.perfil],
-      mio: estado.porPerfil[estado.perfil] ?? PERFIL_VACIO,
+      mio: { ...PERFIL_VACIO, ...estado.porPerfil[estado.perfil] },
       directoraMadre: estado.sesion?.directora || CONFIG.directoraPorDefecto,
       flujo: estado.flujo,
+      popupBono: estado.popupBono,
       hayHojaAbierta: estado.hojasAbiertas > 0,
       aviso: estado.aviso,
       iniciar,
@@ -176,10 +201,13 @@ export function DemoProvider({ children }: { children: ReactNode }) {
       cerrarFlujo,
       guardarSueno,
       enviarMensaje,
+      abrirPopupBono,
+      cerrarPopupBono,
+      elegirFiltroFormaciones,
       registrarHoja,
       avisar,
     }),
-    [estado, iniciar, reiniciar, cambiarPerfil, abrirFlujo, cerrarFlujo, guardarSueno, enviarMensaje, registrarHoja, avisar],
+    [estado, iniciar, reiniciar, cambiarPerfil, abrirFlujo, cerrarFlujo, guardarSueno, enviarMensaje, abrirPopupBono, cerrarPopupBono, elegirFiltroFormaciones, registrarHoja, avisar],
   )
 
   return <Contexto.Provider value={valor}>{children}</Contexto.Provider>

@@ -1,6 +1,7 @@
 import { NotaLegal } from '../components/NotaLegal'
 import { CONFIG } from '../config/demo.config'
 import { soles } from '../domain/format'
+import { navegar, RUTAS } from '../state/router'
 import { useDemo } from '../state/store'
 import bolsa from '../assets/figma/mi-negocio/moneybag.png'
 import billetes from '../assets/figma/mi-negocio/banner-coins.png'
@@ -11,13 +12,19 @@ import monedero from '../assets/figma/mi-negocio/coinpurse.png'
 import alerta from '../assets/figma/mi-negocio/alert.png'
 
 export function MiNegocio() {
-  const { perfil, mio, abrirFlujo, avisar } = useDemo()
+  const { perfil, mio, abrirFlujo, abrirPopupBono, avisar } = useDemo()
   const { actual } = CONFIG.campana
   const campanas = [actual, actual - 1, actual - 2]
   const fueraDeAlcance = () => avisar('Fuera del alcance de esta demo')
 
   // Banner de carrera: solo Emprendedoras que aún no registran su sueño.
   const conBannerCarrera = perfil.grupo === 'emprendedora' && !mio.sueno
+  // Banner del bono: Directoras Junior y Senior. Siempre abre Formaciones con el popup.
+  const conBannerBono = perfil.grupo === 'directora'
+  const verBono = () => {
+    abrirPopupBono()
+    navegar(RUTAS.formaciones)
+  }
 
   return (
     <div className="negocio">
@@ -78,6 +85,27 @@ export function MiNegocio() {
             </div>
           )}
 
+          {conBannerBono && (
+            <div className="destacado">
+              <span className="destacado__imagen">
+                <img src={billetes} alt="" />
+              </span>
+              <div className="destacado__texto">
+                <p className="destacado__frase">
+                  Llévate el bono de <b className="acento">{soles(CONFIG.bonoFormacion)}*</b>
+                </p>
+                <p className="destacado__ayuda">al formar a una nueva Directora</p>
+                <fry-button
+                  hierarchy="primary"
+                  size="small"
+                  text="Ver cómo se gana"
+                  icon-right="arrow-right-outline"
+                  onfryClick={verBono}
+                />
+              </div>
+            </div>
+          )}
+
           <div className="desglose">
             {perfil.desglose.map((grupo) => (
               <div key={grupo.titulo}>
@@ -94,13 +122,14 @@ export function MiNegocio() {
         </div>
         <div className="ganancia__pie">
           <button className="enlace" onClick={fueraDeAlcance}>
-            Reporte de Honorarios
+            {perfil.grupo === 'directora' ? 'Beneficios de Directora' : 'Reporte de Honorarios'}
             <fry-icon name="external-link-outline" size="20" />
           </button>
         </div>
       </section>
 
       {conBannerCarrera && <NotaLegal tipo="ganancia" className="negocio__legal" />}
+      {conBannerBono && <NotaLegal tipo="bono" className="negocio__legal" />}
 
       <section className="tarjeta venta">
         <span className="venta__monedas">

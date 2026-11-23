@@ -11,16 +11,19 @@ export const RUTAS = {
   miCarrera: '/mi-carrera',
   formaciones: '/formaciones',
   chatDirectora: '/chat/directora',
+  /** Prefijo: /chat/candidata/{id} */
+  chatCandidata: '/chat/candidata/',
 } as const
 
 const RUTAS_POR_GRUPO: Record<Grupo, string[]> = {
   emprendedora: [RUTAS.inicio, RUTAS.miNegocio, RUTAS.misGrupos, RUTAS.programas, RUTAS.miCarrera, RUTAS.chatDirectora],
-  directora: [RUTAS.inicio, RUTAS.miNegocio, RUTAS.misGrupos, RUTAS.programas, RUTAS.formaciones],
+  directora: [RUTAS.inicio, RUTAS.miNegocio, RUTAS.misGrupos, RUTAS.programas, RUTAS.formaciones, RUTAS.chatCandidata],
   lider: [RUTAS.inicio],
 }
 
 export function rutaExiste(ruta: string, grupo: Grupo): boolean {
-  return RUTAS_POR_GRUPO[grupo].includes(ruta)
+  // Las rutas que terminan en "/" son prefijos con un id detrás.
+  return RUTAS_POR_GRUPO[grupo].some((r) => (r.length > 1 && r.endsWith('/') ? ruta.startsWith(r) : r === ruta))
 }
 
 function leerRuta(): string {

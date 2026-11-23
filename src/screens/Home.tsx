@@ -1,6 +1,7 @@
 import { NotaLegal } from '../components/NotaLegal'
 import { CONFIG } from '../config/demo.config'
 import { soles } from '../domain/format'
+import { navegar, RUTAS } from '../state/router'
 import { useDemo } from '../state/store'
 import caja from '../assets/figma/home/ql-box.png'
 import reporte from '../assets/figma/home/ql-report.png'
@@ -16,6 +17,7 @@ import chevron from '../assets/figma/home/chevron-right.svg'
 import tarjeta from '../assets/figma/home/credit-card.png'
 import isotipo from '../assets/figma/home/isotipo.svg'
 import fotoDirectora from '../assets/figma/modal-1/photo-directora.jpg'
+import graduada from '../assets/figma/dir-home/banner-graduate.png'
 
 const ACCESOS = [
   { etiqueta: 'Realizar pedido', icono: caja },
@@ -26,7 +28,7 @@ const ACCESOS = [
 ]
 
 export function Home() {
-  const { sesion, perfil, mio, abrirFlujo } = useDemo()
+  const { sesion, perfil, mio, abrirFlujo, abrirPopupBono } = useDemo()
   const { campana } = perfil
 
   const indicadores = [
@@ -41,6 +43,12 @@ export function Home() {
 
   // Banner de carrera: solo Emprendedoras que aún no registran su sueño.
   const conBannerCarrera = perfil.grupo === 'emprendedora' && !mio.sueno
+  // Banner de formación: Directoras Junior y Senior. Siempre abre Formaciones con el popup.
+  const conBannerBono = perfil.grupo === 'directora'
+  const verBono = () => {
+    abrirPopupBono()
+    navegar(RUTAS.formaciones)
+  }
 
   return (
     <>
@@ -97,6 +105,19 @@ export function Home() {
               </span>
             </button>
           )}
+          {conBannerBono && (
+            <button className="anuncio" onClick={verBono}>
+              <span className="anuncio__texto">
+                <span className="anuncio__etiqueta">Formaciones</span>
+                <span>
+                  Forma a una nueva Directora y gana <b>+{soles(CONFIG.bonoFormacion)}*</b>
+                </span>
+              </span>
+              <span className="anuncio__circulo">
+                <img src={graduada} alt="" />
+              </span>
+            </button>
+          )}
           <div className="anuncio anuncio--maya">
             <span className="anuncio__texto">
               <span className="anuncio__etiqueta">Nuevo en Maya</span>
@@ -110,6 +131,7 @@ export function Home() {
           </div>
         </div>
         {conBannerCarrera && <NotaLegal tipo="ganancia" className="anuncios__legal" />}
+        {conBannerBono && <NotaLegal tipo="bono" className="anuncios__legal" />}
       </section>
 
       <footer className="pie">
