@@ -15,7 +15,12 @@ export function datosPais(): DatosPais {
 /** Lleva un monto del config (en soles) a la moneda del país activo. */
 export function montoLocal(montoEnSoles: number): number {
   const { factor, montosAdaptados } = datosPais()
-  return montosAdaptados[montoEnSoles] ?? Math.round(montoEnSoles * factor)
+  if (factor === 1) return montoEnSoles
+  const adaptado = montosAdaptados[montoEnSoles]
+  if (adaptado !== undefined) return adaptado
+  // Sin monto adaptado: se convierte y se redondea a una cifra "de catálogo" (a 5 o a 10).
+  const paso = montoEnSoles * factor >= 1000 ? 10 : 5
+  return Math.round((montoEnSoles * factor) / paso) * paso
 }
 
 /** Monto ya expresado en la moneda del país (p. ej. la meta que escribe la usuaria): "S/8,000", "$2.400". */

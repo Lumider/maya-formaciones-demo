@@ -139,10 +139,41 @@ export const CONFIG = {
       simbolo: '$',
       separadorMiles: '.',
       moneda: 'USD',
-      // TODO: PROVISIONAL. Factor tomado de la equivalencia S/50 ≈ $15 de la base de conocimiento.
-      // Reemplazar por los montos adaptados a Ecuador (aquí en `montosAdaptados`).
-      factor: 0.3,
-      montosAdaptados: {},
+      // Equivalencia del PAR+ 2026: las mismas exigencias están en S/ para Perú y en US$ para Ecuador
+      // (Cuadrante A Junior S/22,500 ↔ US$6.000; Senior S/28,200 ↔ US$7.500), es decir S/3.75 por dólar.
+      factor: 1 / 3.75,
+      // TODO validar con Comercial: el folleto PAR+ de Ecuador no trae ganancias por campaña ni bono de
+      // formación; estos montos son los de Perú llevados a dólares con esa equivalencia y redondeados.
+      // Los desgloses de Mi negocio suman su total también en dólares.
+      montosAdaptados: {
+        // Cifra de carrera, bono de formación y umbral de Venta GP
+        1820: 485,
+        750: 200,
+        15000: 4000,
+        // Requisitos de nivel: Nivel 1 de Ganamás y venta de Grupo Personal de CEM Senior
+        470: 125,
+        6000: 1600,
+        // Ganancia estimada por estatus y ganancia referencial por nivel
+        180: 50,
+        440: 115,
+        600: 160,
+        970: 260,
+        1400: 375,
+        2390: 640,
+        3400: 905,
+        // Líneas del desglose de Mi negocio
+        40: 10,
+        50: 15,
+        60: 15,
+        100: 25,
+        120: 30,
+        130: 35,
+        150: 40,
+        500: 135,
+        650: 175,
+        2200: 590,
+        2700: 720,
+      },
     },
   } satisfies Record<Pais, DatosPais> as Record<Pais, DatosPais>,
 
