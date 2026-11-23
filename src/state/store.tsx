@@ -45,6 +45,8 @@ interface Estado extends Persistido {
   flujo: Flujo
   /** Popup del bono de formación abierto (Parte B). */
   popupBono: boolean
+  /** Mensaje que un simulador deja listo para el siguiente chat (clave = id del chat). */
+  borrador: { chat: string; texto: string } | null
   hojasAbiertas: number
   aviso: { id: number; texto: string } | null
 }
@@ -59,6 +61,7 @@ type Accion =
   | { tipo: 'popupBono'; abierto: boolean }
   | { tipo: 'filtroFormaciones'; filtro: FiltroFormaciones }
   | { tipo: 'filtroEmprendedoras'; filtro: Potencial | null }
+  | { tipo: 'borrador'; borrador: Estado['borrador'] }
   | { tipo: 'hoja'; delta: 1 | -1 }
   | { tipo: 'aviso'; texto: string | null }
 
@@ -93,6 +96,8 @@ function reductor(estado: Estado, accion: Accion): Estado {
       return editarPerfil(estado, (p) => ({ ...p, filtroFormaciones: accion.filtro }))
     case 'filtroEmprendedoras':
       return editarPerfil(estado, (p) => ({ ...p, filtroEmprendedoras: accion.filtro }))
+    case 'borrador':
+      return { ...estado, borrador: accion.borrador }
     case 'hoja':
       return { ...estado, hojasAbiertas: Math.max(0, estado.hojasAbiertas + accion.delta) }
     case 'aviso':
@@ -122,6 +127,7 @@ function estadoInicial(usarGuardado = true): Estado {
     porPerfil: guardado?.porPerfil ?? {},
     flujo: null,
     popupBono: false,
+    borrador: null,
     hojasAbiertas: 0,
     aviso: null,
   }
@@ -137,6 +143,7 @@ interface Demo {
   directoraMadre: string
   flujo: Flujo
   popupBono: boolean
+  borrador: Estado['borrador']
   hayHojaAbierta: boolean
   aviso: Estado['aviso']
   iniciar(sesion: Sesion, perfil: Sigla): void
@@ -150,6 +157,7 @@ interface Demo {
   cerrarPopupBono(): void
   elegirFiltroFormaciones(filtro: FiltroFormaciones): void
   elegirFiltroEmprendedoras(filtro: Potencial | null): void
+  dejarBorrador(borrador: Estado['borrador']): void
   registrarHoja(delta: 1 | -1): void
   avisar(texto: string | null): void
 }
@@ -191,6 +199,7 @@ export function DemoProvider({ children }: { children: ReactNode }) {
     (filtro: Potencial | null) => despachar({ tipo: 'filtroEmprendedoras', filtro }),
     [],
   )
+  const dejarBorrador = useCallback((borrador: Estado['borrador']) => despachar({ tipo: 'borrador', borrador }), [])
   const registrarHoja = useCallback((delta: 1 | -1) => despachar({ tipo: 'hoja', delta }), [])
   const avisar = useCallback((texto: string | null) => despachar({ tipo: 'aviso', texto }), [])
 
@@ -203,6 +212,7 @@ export function DemoProvider({ children }: { children: ReactNode }) {
       directoraMadre: estado.sesion?.directora || CONFIG.directoraPorDefecto,
       flujo: estado.flujo,
       popupBono: estado.popupBono,
+      borrador: estado.borrador,
       hayHojaAbierta: estado.hojasAbiertas > 0,
       aviso: estado.aviso,
       iniciar,
@@ -216,10 +226,11 @@ export function DemoProvider({ children }: { children: ReactNode }) {
       cerrarPopupBono,
       elegirFiltroFormaciones,
       elegirFiltroEmprendedoras,
+      dejarBorrador,
       registrarHoja,
       avisar,
     }),
-    [estado, iniciar, reiniciar, cambiarPerfil, abrirFlujo, cerrarFlujo, guardarSueno, enviarMensaje, abrirPopupBono, cerrarPopupBono, elegirFiltroFormaciones, elegirFiltroEmprendedoras, registrarHoja, avisar],
+    [estado, iniciar, reiniciar, cambiarPerfil, abrirFlujo, cerrarFlujo, guardarSueno, enviarMensaje, abrirPopupBono, cerrarPopupBono, elegirFiltroFormaciones, elegirFiltroEmprendedoras, dejarBorrador, registrarHoja, avisar],
   )
 
   return <Contexto.Provider value={valor}>{children}</Contexto.Provider>

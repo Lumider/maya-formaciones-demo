@@ -48,35 +48,3 @@ export function primerNombre(nombreCompleto: string): string {
   return nombreCompleto.trim().split(/\s+/)[0]
 }
 
-/** Sigla que espera el simulador externo para cada nivel de carrera. */
-const SIGLA_NIVEL: Record<string, string> = { consultora: 'CNS', cem: 'CEM', cemSenior: 'CES' }
-
-/**
- * Enlace al simulador de formación con los datos de la candidata o emprendedora.
- * Solo lleva datos mock de la demo; el bono viaja porque el simulador es para la Directora.
- */
-export function enlaceSimuladorFormacion(datos: {
-  /** Solo nombres mock del config: el nombre real de la participante no viaja en la URL. */
-  directora?: string
-  nombre: string
-  nivel: string
-  metricas: Metricas
-  potencial: Potencial
-  intencion: Intencion
-  sueno?: string | null
-}): string {
-  const p = new URLSearchParams({
-    bono: String(CONFIG.bonoFormacion),
-    nombre: datos.nombre,
-    nivel: SIGLA_NIVEL[datos.nivel] ?? 'CES',
-    venta_gp: String(datos.metricas.ventaGP),
-    activas: String(datos.metricas.activas),
-    pped: String(datos.metricas.pped),
-    // El simulador solo conoce alto, medio y bajo.
-    potencial: datos.potencial === 'sin' ? 'bajo' : datos.potencial,
-    interes: datos.intencion === 'quiere' ? '1' : '0',
-    sueno: datos.sueno ?? '',
-  })
-  if (datos.directora) p.set('dir_nombre', datos.directora)
-  return `${CONFIG.urls.simuladorDirUrl}?${p.toString()}`
-}

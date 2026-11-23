@@ -130,8 +130,6 @@ export const CONFIG = {
   },
 
   urls: {
-    /** Simulador de formación (microsite externo) para Directoras Junior en adelante. Recibe los datos por parámetros. */
-    simuladorDirUrl: 'https://lumider.github.io/maya-redesign/sim/formacion',
     /** Texto corto del enlace de simulación en los mensajes de la Líder. TODO: enlace real. */
     linkSimulacion: 'maya.yanbal.com/simulador',
     /** Texto corto con el que se muestra el enlace a Mi carrera en los mensajes. TODO: enlace real. */
@@ -154,6 +152,33 @@ export const CONFIG = {
     /** Campañas de inicio que se ofrecen, contadas desde la campaña actual. */
     inicios: ['Esta campaña', 'La próxima', 'En dos campañas'],
     etiquetasRitmo: ['Ritmo intenso', 'Ritmo parejo', 'A tu ritmo'],
+    etiquetasRitmoFormacion: ['Ritmo intenso', 'Ritmo parejo', 'A su ritmo'],
+    /**
+     * Simulador de formación: qué hace la candidata y qué le toca a su Directora en cada etapa
+     * (dicho a la Directora y, para la vista de la Líder, en tercera persona).
+     */
+    acompanamiento: {
+      cem: {
+        ella: 'Logra su venta en Nivel 1 e incorpora a su primera consultora activa.',
+        tu: 'Ayúdala a pensar en 3 conocidas que venderían bien y acompaña esa primera incorporación.',
+        suDirectora: 'La ayuda a pensar en 3 conocidas que venderían bien y acompaña esa primera incorporación.',
+      },
+      cemSenior: {
+        ella: 'Logra sus 4 requisitos en una misma campaña: venta en Nivel 1, 2 primeros pedidos, 5 activas y venta de su Grupo Personal.',
+        tu: 'Preséntale la carrera en un semillero y acompaña sus requisitos campaña a campaña.',
+        suDirectora: 'Le presenta la carrera en un semillero y acompaña sus requisitos campaña a campaña.',
+      },
+      aspirante: {
+        ella: 'Completa sus 8 cursos y pasa la entrevista de postulación.',
+        tu: 'Acompáñala en su postulación y prepárala para la entrevista.',
+        suDirectora: 'La acompaña en su postulación y la prepara para la entrevista.',
+      },
+      directora: {
+        ella: 'Sigue el programa Fórmate como Directora: primeros pedidos y desarrollo de su grupo.',
+        tu: 'Transfiérele la gestión poco a poco y trabaja tu crecimiento paralelo.',
+        suDirectora: 'Le transfiere la gestión poco a poco y trabaja su crecimiento paralelo.',
+      },
+    } as Partial<Record<NivelId, { ella: string; tu: string; suDirectora: string }>>,
     /**
      * Por perfil: los tres ritmos (campañas totales hasta Directora) y cuántas campañas
      * toma llegar a cada nivel en cada ritmo.

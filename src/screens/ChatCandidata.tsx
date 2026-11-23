@@ -6,7 +6,7 @@ import { useDemo } from '../state/store'
 
 /** Chat simulado de la Directora con una candidata (no abre WhatsApp real). */
 export function ChatCandidata({ id }: { id: string }) {
-  const { sesion, sigla } = useDemo()
+  const { sesion, sigla, borrador, dejarBorrador } = useDemo()
   const candidata = candidatasDe(sigla).find((c) => c.id === id)
 
   useEffect(() => {
@@ -19,9 +19,12 @@ export function ChatCandidata({ id }: { id: string }) {
       chatId={`candidata:${candidata.id}`}
       contacto={candidata.nombre}
       subtitulo={candidata.nombreNivel}
-      mensaje={mensajeACandidata(candidata, sesion?.nombre ?? '')}
+      mensaje={borrador?.chat === `candidata:${candidata.id}` ? borrador.texto : mensajeACandidata(candidata, sesion?.nombre ?? '')}
       etiquetaVolver="Volver a Formaciones"
-      onVolver={() => navegar(RUTAS.formaciones)}
+      onVolver={() => {
+        dejarBorrador(null)
+        navegar(RUTAS.formaciones)
+      }}
     />
   )
 }

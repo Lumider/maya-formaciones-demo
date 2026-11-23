@@ -17,6 +17,7 @@ import { MiCarrera } from './screens/MiCarrera'
 import { MiNegocio } from './screens/MiNegocio'
 import { Placeholder } from './screens/Placeholder'
 import { Simulador } from './screens/Simulador'
+import { SimuladorFormacion } from './screens/SimuladorFormacion'
 import { navegar, rutaExiste, RUTAS, useRuta } from './state/router'
 import { useDemo } from './state/store'
 
@@ -73,6 +74,9 @@ export default function App() {
 
 function Pantalla({ ruta }: { ruta: string }) {
   const { perfil } = useDemo()
+  if (ruta.startsWith(RUTAS.simuladorFormacion)) {
+    return <SimuladorFormacion id={ruta.slice(RUTAS.simuladorFormacion.length)} />
+  }
   if (perfil.grupo === 'lider') {
     return ruta === RUTAS.emprendedoras ? <Emprendedoras /> : <HomeLider />
   }

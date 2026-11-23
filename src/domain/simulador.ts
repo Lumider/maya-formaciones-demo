@@ -1,4 +1,4 @@
-import { CONFIG, type Nivel, type Perfil, type Sigla } from '../config/demo.config'
+import { CONFIG, type Nivel, type NivelId, type Sigla } from '../config/demo.config'
 
 /** Campaña absoluta (C1 del año actual = 1) → "C4" este año, "C4 (2027)" si cruza de año. */
 export function etiquetaCampana(absoluta: number): string {
@@ -40,7 +40,12 @@ export interface Plan {
  * Arma el plan hasta Directora. En la primera etapa gana lo que gana hoy; en las
  * siguientes, la ganancia referencial del nivel que ya alcanzó.
  */
-export function simularPlan(perfil: Perfil, ritmo: number, inicio: number, meta: number | null): Plan {
+export function simularPlan(
+  perfil: { sigla: Sigla; gananciaActual: number | null },
+  ritmo: number,
+  inicio: number,
+  meta: number | null,
+): Plan {
   const reparto = CONFIG.simulador.planes[perfil.sigla]?.[ritmo] ?? {}
   const etapas: EtapaPlan[] = []
   let cursor = inicio
@@ -66,4 +71,9 @@ export function simularPlan(perfil: Perfil, ritmo: number, inicio: number, meta:
   }
 
   return { inicio, llegada: cursor, campanas: cursor - inicio, etapas, campanaMeta }
+}
+
+/** Estatus desde el que parte el plan de una candidata o emprendedora, según su nivel. */
+export function siglaDeNivel(nivel: NivelId): Sigla {
+  return nivel === 'consultora' ? 'CNS' : nivel === 'cem' ? 'CEM' : 'CES'
 }
