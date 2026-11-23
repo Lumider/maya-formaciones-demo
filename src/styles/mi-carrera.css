@@ -344,3 +344,10 @@
 .paso-card__anillos {
   margin-right: -14px;
 }
+
+/* Celulares angostos (menos de 360 px): el camino se reduce en proporción para no desbordar */
+@media (max-width: 359px) {
+  .camino {
+    zoom: 0.86;
+  }
+}

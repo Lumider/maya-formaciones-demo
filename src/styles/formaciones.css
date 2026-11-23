@@ -311,3 +311,18 @@
 .bono__legal {
   margin-top: 20px;
 }
+
+/* Celulares angostos: las pestañas se compactan y, si hace falta, parten el texto en dos líneas */
+@media (max-width: 359px) {
+  .formaciones__pestanas {
+    align-items: stretch;
+  }
+  .formaciones__pestana {
+    min-width: 0;
+    padding-left: 2px;
+    padding-right: 2px;
+    font-size: 13px;
+    letter-spacing: 0;
+    white-space: normal;
+  }
+}

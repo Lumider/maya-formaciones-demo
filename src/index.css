@@ -85,7 +85,6 @@ strong {
 .app {
   position: relative;
   width: 100%;
-  max-width: 390px;
   height: 100dvh;
   margin: 0 auto;
   background: var(--c-fondo);
@@ -128,6 +127,14 @@ strong {
 }
 .capa > * {
   pointer-events: auto;
+}
+
+/* En celulares la app ocupa toda la pantalla. Solo en pantallas más anchas (tablet o
+   computadora) se muestra centrada con ancho de celular: no hay layout de tablet ni desktop. */
+@media (min-width: 600px) {
+  .app {
+    max-width: 430px;
+  }
 }
 
 /* ---------- Utilidades de texto ---------- */
@@ -193,7 +200,7 @@ strong {
   flex: none;
   display: flex;
   align-items: center;
-  padding: 8px 0;
+  padding: 8px 0 calc(8px + env(safe-area-inset-bottom));
   background: var(--c-fondo);
   border-top: 1px solid #e7e0d8;
 }
@@ -265,7 +272,7 @@ strong {
   flex: none;
   display: flex;
   gap: 12px;
-  padding: 16px 24px 24px;
+  padding: 16px 24px calc(24px + env(safe-area-inset-bottom));
   background: var(--c-fondo);
 }
 .hoja__pie > * {

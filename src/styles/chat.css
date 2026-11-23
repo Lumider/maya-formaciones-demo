@@ -55,9 +55,12 @@
   white-space: nowrap;
 }
 .chat__contacto span {
+  overflow: hidden;
   font-size: 12px;
   line-height: 14px;
   color: #898989;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .chat__mensajes {
   flex: 1;
@@ -140,7 +143,7 @@
   flex: 1;
   min-width: 0;
   min-height: 32px;
-  max-height: 232px;
+  max-height: min(232px, 36dvh);
   overflow-y: auto;
   display: flex;
   align-items: flex-start;
