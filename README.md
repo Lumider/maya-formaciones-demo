@@ -39,4 +39,4 @@ Los componentes (`fry-button`, `fry-chip`, `fry-switch`, `fry-input-currency`, `
 
 1. Base, Configurar demo, panel "Ver como" y Parte A (Mi carrera) — **hecha**.
 2. Parte B · Formaciones (Directoras Junior y Senior) — **hecha**.
-3. Parte C · Emprendedoras (Líderes) — pendiente.
+3. Parte C · Emprendedoras (Líderes) — **hecha**.

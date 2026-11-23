@@ -9,6 +9,7 @@ import './styles/mi-carrera.css'
 import './styles/flujo.css'
 import './styles/chat.css'
 import './styles/formaciones.css'
+import './styles/lider.css'
 import App from './App.tsx'
 import { DemoProvider } from './state/store.tsx'
 

@@ -6,10 +6,13 @@ import { NavInferior } from './components/NavInferior'
 import { VerComo } from './components/VerComo'
 import { ChatCandidata } from './screens/ChatCandidata'
 import { ChatDirectora } from './screens/ChatDirectora'
+import { ChatDirectoraHija } from './screens/ChatDirectoraHija'
 import { ConfigScreen } from './screens/ConfigScreen'
 import { FlujoCarrera } from './screens/flujo/FlujoCarrera'
 import { Formaciones } from './screens/formaciones/Formaciones'
 import { Home } from './screens/Home'
+import { Emprendedoras } from './screens/lider/Emprendedoras'
+import { HomeLider } from './screens/lider/HomeLider'
 import { MiCarrera } from './screens/MiCarrera'
 import { MiNegocio } from './screens/MiNegocio'
 import { Placeholder } from './screens/Placeholder'
@@ -45,6 +48,8 @@ export default function App() {
       <CapaContexto.Provider value={capa}>
         {ruta === RUTAS.chatDirectora ? (
           <ChatDirectora />
+        ) : ruta.startsWith(RUTAS.chatDirectoraHija) ? (
+          <ChatDirectoraHija id={ruta.slice(RUTAS.chatDirectoraHija.length)} />
         ) : ruta.startsWith(RUTAS.chatCandidata) ? (
           <ChatCandidata id={ruta.slice(RUTAS.chatCandidata.length)} />
         ) : (
@@ -68,7 +73,7 @@ export default function App() {
 function Pantalla({ ruta }: { ruta: string }) {
   const { perfil } = useDemo()
   if (perfil.grupo === 'lider') {
-    return <Placeholder titulo="Home de la Líder" detalle="Se construye en la etapa 3 (Parte C · Emprendedoras)." />
+    return ruta === RUTAS.emprendedoras ? <Emprendedoras /> : <HomeLider />
   }
   switch (ruta) {
     case RUTAS.miNegocio:

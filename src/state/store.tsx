@@ -2,6 +2,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useReducer,
 import { CONFIG, esSigla, type Perfil, type Sigla } from '../config/demo.config'
 import type { Sueno } from '../domain/carrera'
 import type { FiltroFormaciones } from '../domain/formaciones'
+import type { Potencial } from '../domain/potencial'
 
 const CLAVE = 'maya-formaciones-demo:v1'
 
@@ -25,9 +26,11 @@ export interface EstadoPerfil {
   chats: Record<string, MensajeEnviado[]>
   popupBonoVisto: boolean
   filtroFormaciones: FiltroFormaciones
+  /** Filtro por potencial de Emprendedoras (Parte C); null = Todas. */
+  filtroEmprendedoras: Potencial | null
 }
 
-const PERFIL_VACIO: EstadoPerfil = { sueno: null, chats: {}, popupBonoVisto: false, filtroFormaciones: 'listas' }
+const PERFIL_VACIO: EstadoPerfil = { sueno: null, chats: {}, popupBonoVisto: false, filtroFormaciones: 'listas', filtroEmprendedoras: null }
 
 interface Persistido {
   sesion: Sesion | null
@@ -55,6 +58,7 @@ type Accion =
   | { tipo: 'enviarMensaje'; chat: string; mensaje: MensajeEnviado }
   | { tipo: 'popupBono'; abierto: boolean }
   | { tipo: 'filtroFormaciones'; filtro: FiltroFormaciones }
+  | { tipo: 'filtroEmprendedoras'; filtro: Potencial | null }
   | { tipo: 'hoja'; delta: 1 | -1 }
   | { tipo: 'aviso'; texto: string | null }
 
@@ -87,6 +91,8 @@ function reductor(estado: Estado, accion: Accion): Estado {
         : { ...estado, popupBono: false }
     case 'filtroFormaciones':
       return editarPerfil(estado, (p) => ({ ...p, filtroFormaciones: accion.filtro }))
+    case 'filtroEmprendedoras':
+      return editarPerfil(estado, (p) => ({ ...p, filtroEmprendedoras: accion.filtro }))
     case 'hoja':
       return { ...estado, hojasAbiertas: Math.max(0, estado.hojasAbiertas + accion.delta) }
     case 'aviso':
@@ -143,6 +149,7 @@ interface Demo {
   abrirPopupBono(): void
   cerrarPopupBono(): void
   elegirFiltroFormaciones(filtro: FiltroFormaciones): void
+  elegirFiltroEmprendedoras(filtro: Potencial | null): void
   registrarHoja(delta: 1 | -1): void
   avisar(texto: string | null): void
 }
@@ -180,6 +187,10 @@ export function DemoProvider({ children }: { children: ReactNode }) {
     (filtro: FiltroFormaciones) => despachar({ tipo: 'filtroFormaciones', filtro }),
     [],
   )
+  const elegirFiltroEmprendedoras = useCallback(
+    (filtro: Potencial | null) => despachar({ tipo: 'filtroEmprendedoras', filtro }),
+    [],
+  )
   const registrarHoja = useCallback((delta: 1 | -1) => despachar({ tipo: 'hoja', delta }), [])
   const avisar = useCallback((texto: string | null) => despachar({ tipo: 'aviso', texto }), [])
 
@@ -204,10 +215,11 @@ export function DemoProvider({ children }: { children: ReactNode }) {
       abrirPopupBono,
       cerrarPopupBono,
       elegirFiltroFormaciones,
+      elegirFiltroEmprendedoras,
       registrarHoja,
       avisar,
     }),
-    [estado, iniciar, reiniciar, cambiarPerfil, abrirFlujo, cerrarFlujo, guardarSueno, enviarMensaje, abrirPopupBono, cerrarPopupBono, elegirFiltroFormaciones, registrarHoja, avisar],
+    [estado, iniciar, reiniciar, cambiarPerfil, abrirFlujo, cerrarFlujo, guardarSueno, enviarMensaje, abrirPopupBono, cerrarPopupBono, elegirFiltroFormaciones, elegirFiltroEmprendedoras, registrarHoja, avisar],
   )
 
   return <Contexto.Provider value={valor}>{children}</Contexto.Provider>

@@ -49,6 +49,39 @@ export interface Candidata extends Metricas {
   soloPara?: Sigla[]
 }
 
+/** Resultado de una emprendedora en una campaña (fila de "Ver crecimiento"). */
+export interface RegistroCampana extends Metricas {
+  campana: number
+  califica: NivelId
+  /** Índice de morosidad, en porcentaje. */
+  im: number
+  /** Solo informativo; para el potencial se usa `pped` (el del grupo). */
+  ppedDirectos: number
+}
+
+/** Emprendedora del grupo de una Directora hija (Parte C). */
+export interface Emprendedora {
+  id: string
+  nombre: string
+  intencion: Intencion
+  /** Últimas campañas, la actual primero. La card muestra exactamente historial[0]. */
+  historial: RegistroCampana[]
+}
+
+export interface DirectoraHija {
+  id: string
+  nombre: string
+  estatus: string
+  madre: string
+  /** Etiqueta "P. Formadora". */
+  formadora: boolean
+  /** Formaciones pactadas en su plan de negocio. */
+  formacionesPactadas: number
+  /** Venta GP de la Directora por campaña, la actual primero (mismas campañas que el historial). */
+  ventaGP: number[]
+  emprendedoras: Emprendedora[]
+}
+
 export interface Ascenso {
   titulo: string
   desde: string
@@ -101,6 +134,8 @@ export const CONFIG = {
     simuladorUrl: 'https://example.com/simulador-carrera',
     /** TODO: URL real del simulador de formación. */
     simuladorDirUrl: 'https://example.com/simulador-formacion',
+    /** Texto corto del enlace de simulación en los mensajes de la Líder. TODO: enlace real. */
+    linkSimulacion: 'maya.yanbal.com/simulador',
     /** Texto corto con el que se muestra el enlace a Mi carrera en los mensajes. TODO: enlace real. */
     linkMiCarrera: 'maya.yanbal.com/mi-carrera',
   },
@@ -354,6 +389,112 @@ export const CONFIG = {
     { id: 'patricia-solis', nombre: 'Patricia Solís', nivel: 'cemSenior', ventaGP: 19800, activas: 12, pped: 5, intencion: 'quiere', sueno: 'Pagar estudios', soloPara: ['SNR'] },
     { id: 'carmen-vela', nombre: 'Carmen Vela', nivel: 'cemSenior', ventaGP: 18900, activas: 11, pped: 4, intencion: 'quiere', sueno: 'Tener mi negocio', soloPara: ['SNR'] },
   ] as Candidata[],
+
+  /** Parte C · Líderes (SSE y REG ven los mismos datos en esta versión). */
+  lideres: {
+    /** Total de LID de la Líder (denominador de "Tienes n/total LID con emprendedoras"). */
+    totalLid: 20,
+    /** Resumen "Mi Campaña" del Home de la Líder (como en el frame, en soles). */
+    campana: [
+      { etiqueta: 'Sueño: Tokio', valor: 'Sí Proyectas', icono: 'sueno' },
+      { etiqueta: 'Venta Familiar', valor: 80000, moneda: true, icono: 'dinero' },
+      { etiqueta: 'Líder Poderosa', valor: 'Sí Proyecta', icono: 'liderPoderosa' },
+      { etiqueta: 'Venta GP actual', valor: 800000, moneda: true, icono: 'dinero' },
+      { etiqueta: 'Activas GP', valor: 23, icono: 'check' },
+      { etiqueta: 'Primeros Pedidos', valor: 3, icono: 'primerosPedidos' },
+      { etiqueta: 'Índice de Morosidad', valor: '2.54%', icono: 'morosidad' },
+      { etiqueta: 'Deuda actual', valor: 27000, moneda: true, icono: 'deuda' },
+      { etiqueta: 'Cuadrante', valor: 'A', icono: 'cuadrante' },
+      { etiqueta: 'Crédito Yanbal', valor: 27000, moneda: true, icono: 'credito' },
+    ] as { etiqueta: string; valor: string | number; moneda?: boolean; icono: string }[],
+    /** Accesos de "Mis Directoras" que no funcionan en la demo, con su contador fijo. */
+    accesosFueraDeAlcance: [
+      { etiqueta: 'Cuadrante D', contador: 2 },
+      { etiqueta: 'No logra meta', contador: 10 },
+      { etiqueta: 'Con Aspirante', contador: 1 },
+      { etiqueta: 'Sin CEM/CES', contador: 1 },
+      { etiqueta: 'Sin Estrella', contador: 1 },
+    ],
+    directoras: [
+      {
+        id: 'lorena-nunez',
+        nombre: 'Lorena Núñez',
+        estatus: 'SSR',
+        madre: 'Giordana L.',
+        formadora: true,
+        formacionesPactadas: 1,
+        ventaGP: [78800, 72900, 63700, 64100],
+        emprendedoras: [
+          {
+            id: 'ena-molocho',
+            nombre: 'Ena Molocho',
+            intencion: 'quiere',
+            historial: [
+              { campana: 11, ventaGP: 21200, califica: 'cemSenior', im: 2.3, activas: 12, ppedDirectos: 2, pped: 4 },
+              { campana: 10, ventaGP: 19400, califica: 'cemSenior', im: 2.9, activas: 11, ppedDirectos: 2, pped: 3 },
+              { campana: 9, ventaGP: 17800, califica: 'cem', im: 3.4, activas: 10, ppedDirectos: 1, pped: 2 },
+              { campana: 8, ventaGP: 16900, califica: 'cem', im: 3.1, activas: 9, ppedDirectos: 1, pped: 2 },
+            ],
+          },
+          {
+            id: 'pamela-ramos',
+            nombre: 'Pamela Ramos',
+            intencion: 'quiere',
+            historial: [
+              { campana: 11, ventaGP: 18600, califica: 'cemSenior', im: 2.6, activas: 11, ppedDirectos: 2, pped: 3 },
+              { campana: 10, ventaGP: 17100, califica: 'cemSenior', im: 2.8, activas: 10, ppedDirectos: 1, pped: 3 },
+              { campana: 9, ventaGP: 15900, califica: 'cem', im: 3.1, activas: 9, ppedDirectos: 1, pped: 2 },
+              { campana: 8, ventaGP: 15200, califica: 'cem', im: 3.0, activas: 9, ppedDirectos: 1, pped: 2 },
+            ],
+          },
+          {
+            id: 'rocio-huertas',
+            nombre: 'Rocío Huertas',
+            intencion: 'aunNoDecide',
+            historial: [
+              { campana: 11, ventaGP: 16400, califica: 'cemSenior', im: 2.8, activas: 10, ppedDirectos: 1, pped: 3 },
+              { campana: 10, ventaGP: 15600, califica: 'cemSenior', im: 3.0, activas: 10, ppedDirectos: 1, pped: 2 },
+              { campana: 9, ventaGP: 14800, califica: 'cem', im: 3.2, activas: 9, ppedDirectos: 1, pped: 2 },
+              { campana: 8, ventaGP: 14100, califica: 'cem', im: 3.5, activas: 8, ppedDirectos: 0, pped: 1 },
+            ],
+          },
+          {
+            id: 'maria-mercedes',
+            nombre: 'María Mercedes',
+            intencion: 'noRegistro',
+            historial: [
+              { campana: 11, ventaGP: 920, califica: 'consultora', im: 4.1, activas: 3, ppedDirectos: 0, pped: 0 },
+              { campana: 10, ventaGP: 1100, califica: 'consultora', im: 3.8, activas: 3, ppedDirectos: 0, pped: 0 },
+              { campana: 9, ventaGP: 870, califica: 'consultora', im: 4.4, activas: 2, ppedDirectos: 0, pped: 0 },
+              { campana: 8, ventaGP: 990, califica: 'consultora', im: 4.0, activas: 3, ppedDirectos: 0, pped: 1 },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'rosanna-carol-palacios',
+        nombre: 'Rosanna Carol Palacios',
+        estatus: 'SSR',
+        madre: 'María R.',
+        formadora: false,
+        formacionesPactadas: 1,
+        ventaGP: [61200, 58400, 55900, 56300],
+        emprendedoras: [
+          {
+            id: 'karla-ruiz',
+            nombre: 'Karla Ruiz',
+            intencion: 'quiere',
+            historial: [
+              { campana: 11, ventaGP: 9800, califica: 'cemSenior', im: 3.0, activas: 8, ppedDirectos: 1, pped: 2 },
+              { campana: 10, ventaGP: 9100, califica: 'cemSenior', im: 3.3, activas: 7, ppedDirectos: 1, pped: 2 },
+              { campana: 9, ventaGP: 8300, califica: 'cem', im: 3.6, activas: 7, ppedDirectos: 1, pped: 1 },
+              { campana: 8, ventaGP: 7900, califica: 'cem', im: 3.4, activas: 6, ppedDirectos: 0, pped: 1 },
+            ],
+          },
+        ],
+      },
+    ] as DirectoraHija[],
+  },
 
   /** Agrupación de los botones del panel "Ver como". */
   verComo: [
