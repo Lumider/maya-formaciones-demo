@@ -9,6 +9,7 @@ export const RUTAS = {
   misGrupos: '/mis-grupos',
   programas: '/programas',
   miCarrera: '/mi-carrera',
+  simulador: '/simulador',
   formaciones: '/formaciones',
   chatDirectora: '/chat/directora',
   /** Prefijo: /chat/candidata/{id} */
@@ -19,7 +20,7 @@ export const RUTAS = {
 } as const
 
 const RUTAS_POR_GRUPO: Record<Grupo, string[]> = {
-  emprendedora: [RUTAS.inicio, RUTAS.miNegocio, RUTAS.misGrupos, RUTAS.programas, RUTAS.miCarrera, RUTAS.chatDirectora],
+  emprendedora: [RUTAS.inicio, RUTAS.miNegocio, RUTAS.misGrupos, RUTAS.programas, RUTAS.miCarrera, RUTAS.simulador, RUTAS.chatDirectora],
   directora: [RUTAS.inicio, RUTAS.miNegocio, RUTAS.misGrupos, RUTAS.programas, RUTAS.formaciones, RUTAS.chatCandidata],
   lider: [RUTAS.inicio, RUTAS.emprendedoras, RUTAS.chatDirectoraHija],
 }

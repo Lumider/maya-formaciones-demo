@@ -1,7 +1,7 @@
-import { CONFIG, type Metricas } from '../../config/demo.config'
+import type { Metricas } from '../../config/demo.config'
 import { avisoDeCandidata, type CandidataEvaluada } from '../../domain/formaciones'
 import { soles } from '../../domain/format'
-import { cumpleVariable, primerNombre } from '../../domain/potencial'
+import { cumpleVariable, enlaceSimuladorFormacion, primerNombre } from '../../domain/potencial'
 import { useDemo } from '../../state/store'
 import { EtiquetaPotencial } from '../../components/EtiquetaPotencial'
 import { FilaEstado } from '../../components/FilaEstado'
@@ -84,7 +84,14 @@ export function CardCandidata({ candidata, destacada, enviado, onContactar }: Pr
       </div>
 
       <div className="candidata__pie">
-        <a className="enlace enlace--chico" href={CONFIG.urls.simuladorDirUrl} target="_blank" rel="noopener noreferrer">
+        <a className="enlace enlace--chico" href={enlaceSimuladorFormacion({
+            nombre: candidata.nombre,
+            nivel: candidata.nivel,
+            metricas: candidata,
+            potencial: candidata.potencial,
+            intencion: candidata.intencion,
+            sueno: candidata.suenoRegistrado,
+          })} target="_blank" rel="noopener noreferrer">
           Simular formación
           <fry-icon name="external-link-outline" size="16" />
         </a>

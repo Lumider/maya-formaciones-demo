@@ -16,6 +16,7 @@ import { HomeLider } from './screens/lider/HomeLider'
 import { MiCarrera } from './screens/MiCarrera'
 import { MiNegocio } from './screens/MiNegocio'
 import { Placeholder } from './screens/Placeholder'
+import { Simulador } from './screens/Simulador'
 import { navegar, rutaExiste, RUTAS, useRuta } from './state/router'
 import { useDemo } from './state/store'
 
@@ -55,7 +56,7 @@ export default function App() {
         ) : (
           <>
             <Cabecera />
-            <main className="pantalla" key={ruta}>
+            <main className="pantalla" key={`${perfil.sigla}:${ruta}`}>
               <Pantalla ruta={ruta} />
             </main>
             {conNav && <NavInferior ruta={ruta} />}
@@ -84,6 +85,8 @@ function Pantalla({ ruta }: { ruta: string }) {
       return <Placeholder titulo="Programas" />
     case RUTAS.miCarrera:
       return <MiCarrera />
+    case RUTAS.simulador:
+      return <Simulador />
     case RUTAS.formaciones:
       return <Formaciones />
     default:

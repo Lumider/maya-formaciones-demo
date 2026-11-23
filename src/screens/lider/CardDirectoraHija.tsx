@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react'
 import { EtiquetaPotencial } from '../../components/EtiquetaPotencial'
-import { CONFIG } from '../../config/demo.config'
 import type { DirectoraEvaluada, EmprendedoraEvaluada } from '../../domain/lideres'
 import { soles } from '../../domain/format'
-import { primerNombre, TEXTO_INTENCION } from '../../domain/potencial'
+import { enlaceSimuladorFormacion, primerNombre, TEXTO_INTENCION } from '../../domain/potencial'
 import { useDemo } from '../../state/store'
 
 interface Props {
@@ -82,7 +81,14 @@ export function CardDirectoraHija({ directora, abiertaPorDefecto, onContactar, o
                   size="small"
                   full-width
                   text="Simular crecimiento"
-                  href={`${CONFIG.urls.simuladorDirUrl}?emprendedora=${encodeURIComponent(e.nombre)}`}
+                  href={enlaceSimuladorFormacion({
+                    directora: directora.nombre,
+                    nombre: e.nombre,
+                    nivel: e.actual.califica,
+                    metricas: e.actual,
+                    potencial: e.potencial,
+                    intencion: e.intencion,
+                  })}
                   target="_blank"
                   rel="noopener noreferrer"
                 />

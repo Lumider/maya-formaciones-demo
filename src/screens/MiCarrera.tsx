@@ -72,10 +72,10 @@ export function MiCarrera() {
           </span>
           <img src={anillosWhatsapp} alt="" width={115} height={115} />
         </button>
-        <a className="paso-card" href={CONFIG.urls.simuladorUrl} target="_blank" rel="noopener noreferrer">
+        <button className="paso-card" onClick={() => navegar(RUTAS.simulador)}>
           <span className="paso-card__texto">
             <b>
-              Simula tu carrera <fry-icon name="arrow-up-right-outline" size="20" />
+              Simula tu carrera <fry-icon name="arrow-right-outline" size="20" />
             </b>
             <span>Calcula con tus números cuánto ganarías en cada nivel.</span>
           </span>
@@ -85,7 +85,7 @@ export function MiCarrera() {
             <img src={anilloMedio} alt="" />
             <img src={trofeo} alt="" />
           </span>
-        </a>
+        </button>
         {!sueno && <NotaLegal tipo="ganancia" />}
       </section>
 

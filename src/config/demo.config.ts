@@ -130,10 +130,8 @@ export const CONFIG = {
   },
 
   urls: {
-    /** TODO: URL real del simulador de carrera. */
-    simuladorUrl: 'https://example.com/simulador-carrera',
-    /** TODO: URL real del simulador de formación. */
-    simuladorDirUrl: 'https://example.com/simulador-formacion',
+    /** Simulador de formación (microsite externo) para Directoras Junior en adelante. Recibe los datos por parámetros. */
+    simuladorDirUrl: 'https://lumider.github.io/maya-redesign/sim/formacion',
     /** Texto corto del enlace de simulación en los mensajes de la Líder. TODO: enlace real. */
     linkSimulacion: 'maya.yanbal.com/simulador',
     /** Texto corto con el que se muestra el enlace a Mi carrera en los mensajes. TODO: enlace real. */
@@ -146,8 +144,42 @@ export const CONFIG = {
   /** Umbrales de "cumple": los mismos para la vista de Directora y la de Líderes. */
   umbrales: { ventaGP: 15000, activas: 10, pped: 3 } satisfies Metricas as Metricas,
 
+  /**
+   * Simulador de carrera (Emprendedoras). TODO validar con Comercial:
+   * ritmos y reparto de campañas por etapa (tomados del simulador anterior).
+   */
+  simulador: {
+    anioActual: 2026,
+    campanasPorAnio: 13,
+    /** Campañas de inicio que se ofrecen, contadas desde la campaña actual. */
+    inicios: ['Esta campaña', 'La próxima', 'En dos campañas'],
+    etiquetasRitmo: ['Ritmo intenso', 'Ritmo parejo', 'A tu ritmo'],
+    /**
+     * Por perfil: los tres ritmos (campañas totales hasta Directora) y cuántas campañas
+     * toma llegar a cada nivel en cada ritmo.
+     */
+    planes: {
+      CNS: {
+        10: { cem: 1, cemSenior: 3, aspirante: 3, directora: 3 },
+        12: { cem: 2, cemSenior: 4, aspirante: 3, directora: 3 },
+        14: { cem: 2, cemSenior: 4, aspirante: 4, directora: 4 },
+      },
+      CEM: {
+        9: { cemSenior: 3, aspirante: 3, directora: 3 },
+        11: { cemSenior: 4, aspirante: 4, directora: 3 },
+        13: { cemSenior: 5, aspirante: 4, directora: 4 },
+      },
+      CES: {
+        6: { aspirante: 3, directora: 3 },
+        8: { aspirante: 5, directora: 3 },
+        10: { aspirante: 6, directora: 4 },
+      },
+    } as Partial<Record<Sigla, Record<number, Partial<Record<NivelId, number>>>>>,
+  },
+
   legales: {
     ganancia: '*Ganancia estimada referencial por campaña (4 semanas).',
+    simulador: '*Ganancia estimada referencial por campaña (4 semanas). El plan es una proyección, no una promesa de ingresos.',
     bono: '*Bono referencial, sujeto a las condiciones del programa de formación.',
   },
 
