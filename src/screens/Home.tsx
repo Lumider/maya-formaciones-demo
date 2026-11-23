@@ -1,0 +1,126 @@
+import { NotaLegal } from '../components/NotaLegal'
+import { CONFIG } from '../config/demo.config'
+import { soles } from '../domain/format'
+import { useDemo } from '../state/store'
+import caja from '../assets/figma/home/ql-box.png'
+import reporte from '../assets/figma/home/ql-report.png'
+import estadisticas from '../assets/figma/home/ql-statistics.png'
+import incorporar from '../assets/figma/home/ql-incorporate.png'
+import cursos from '../assets/figma/home/ql-graduate.png'
+import indVenta from '../assets/figma/home/ind-venta.png'
+import indGanancia from '../assets/figma/home/ind-ganancia.png'
+import indActivas from '../assets/figma/home/ind-activas.png'
+import indDeuda from '../assets/figma/home/ind-deuda.png'
+import indCredito from '../assets/figma/home/ind-credito.png'
+import chevron from '../assets/figma/home/chevron-right.svg'
+import tarjeta from '../assets/figma/home/credit-card.png'
+import isotipo from '../assets/figma/home/isotipo.svg'
+import fotoDirectora from '../assets/figma/modal-1/photo-directora.jpg'
+
+const ACCESOS = [
+  { etiqueta: 'Realizar pedido', icono: caja },
+  { etiqueta: 'Reportes', icono: reporte, espejo: true },
+  { etiqueta: 'Elige crecer', icono: estadisticas },
+  { etiqueta: 'Incorporar', icono: incorporar },
+  { etiqueta: 'Mis cursos', icono: cursos },
+]
+
+export function Home() {
+  const { sesion, perfil, mio, abrirFlujo } = useDemo()
+  const { campana } = perfil
+
+  const indicadores = [
+    { etiqueta: 'Venta de GP', valor: soles(campana.ventaGP), icono: indVenta },
+    ...(perfil.gananciaActual !== null
+      ? [{ etiqueta: 'Ganancia estimada', valor: soles(perfil.gananciaActual), icono: indGanancia, destacado: true }]
+      : []),
+    { etiqueta: 'Activas del grupo', valor: String(campana.activasGrupo), icono: indActivas, clase: 'indicador__icono--activas' },
+    { etiqueta: 'Deuda actual', valor: soles(campana.deudaActual), icono: indDeuda },
+    { etiqueta: 'Crédito Yanbal', valor: soles(campana.creditoYanbal), icono: indCredito, clase: 'indicador__icono--credito' },
+  ]
+
+  // Banner de carrera: solo Emprendedoras que aún no registran su sueño.
+  const conBannerCarrera = perfil.grupo === 'emprendedora' && !mio.sueno
+
+  return (
+    <>
+      <section className="saludo">
+        <p className="saludo__actualizado">{CONFIG.campana.actualizado}</p>
+        <div className="saludo__fila">
+          <div>
+            <h1 className="t-titulo">¡Hola, {sesion?.nombre}!</h1>
+            <p className="saludo__pregunta">¿Qué vas a hacer hoy?</p>
+          </div>
+          <fry-chip type="action-icon" size="small" icon="calendar-outline" label={CONFIG.campana.etiqueta} />
+        </div>
+      </section>
+
+      <ul className="accesos">
+        {ACCESOS.map((a) => (
+          <li className="acceso" key={a.etiqueta}>
+            <img src={a.icono} alt="" className={a.espejo ? 'acceso__icono--espejo' : ''} />
+            {a.etiqueta}
+          </li>
+        ))}
+      </ul>
+
+      <section className="campana">
+        <h2 className="campana__titulo">Mi Campaña</h2>
+        <ul className="campana__tarjetas">
+          {indicadores.map((i) => (
+            <li className="indicador" key={i.etiqueta}>
+              <span className="indicador__cabecera">
+                <span className={`indicador__icono ${i.clase ?? ''}`}>
+                  <img src={i.icono} alt="" />
+                </span>
+                <img className="indicador__chevron" src={chevron} alt="" />
+              </span>
+              <span className="indicador__etiqueta">{i.etiqueta}</span>
+              <b className={`indicador__valor ${i.destacado ? 'indicador__valor--destacado' : ''}`}>{i.valor}</b>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section className="anuncios">
+        <div className="anuncios__carrusel">
+          {conBannerCarrera && (
+            <button className="anuncio" onClick={() => abrirFlujo('beneficios')}>
+              <span className="anuncio__texto">
+                <span className="anuncio__etiqueta">Carrera Yanbal</span>
+                <span>
+                  Con la Carrera Yanbal puedes ganar <b>desde {soles(CONFIG.gananciaDirectora)} por campaña*</b>
+                </span>
+              </span>
+              <span className="anuncio__foto">
+                <img src={fotoDirectora} alt="" />
+              </span>
+            </button>
+          )}
+          <div className="anuncio anuncio--maya">
+            <span className="anuncio__texto">
+              <span className="anuncio__etiqueta">Nuevo en Maya</span>
+              <span>
+                Ahora podrás <b>ampliar</b>, <b>reducir</b> y <b>cancelar</b> los créditos de tu GP.
+              </span>
+            </span>
+            <span className="anuncio__tarjeta">
+              <img src={tarjeta} alt="" />
+            </span>
+          </div>
+        </div>
+        {conBannerCarrera && <NotaLegal tipo="ganancia" className="anuncios__legal" />}
+      </section>
+
+      <footer className="pie">
+        <img src={isotipo} alt="" width={24} height={24} />
+        <p>UNIQUE S.A.&nbsp;&nbsp;|&nbsp;&nbsp;20100102413</p>
+        <p className="pie__enlaces">
+          <u>Política de Privacidad</u>
+          <u>Términos de servicio</u>
+        </p>
+        <p>©2026 Yanbal&nbsp;&nbsp;|&nbsp;&nbsp;Versión v1.0</p>
+      </footer>
+    </>
+  )
+}
