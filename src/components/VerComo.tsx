@@ -15,15 +15,20 @@ export function VerComo({ ruta, conNav }: { ruta: string; conNav: boolean }) {
   const [abierto, setAbierto] = useState(false)
 
   // Con un modal u hoja abierta el panel se oculta para no tapar los botones.
+  const alReiniciar = () => {
+    reiniciar()
+    navegar(RUTAS.config)
+  }
+
   if (!capa || !sesion || hayHojaAbierta || ruta === RUTAS.config) return null
 
-  // Sin panel queda solo un acceso discreto para volver al configurador de la demo.
+  // Sin panel queda solo un acceso discreto que reinicia la demo y vuelve al configurador.
   if (!sesion.mostrarPanel) {
     return createPortal(
       <button
         className={`vercomo-ajustes ${conNav ? 'vercomo--sobre-nav' : ''}`}
-        onClick={() => navegar(RUTAS.config)}
-        aria-label="Volver a la configuración de la demo"
+        onClick={alReiniciar}
+        aria-label="Reiniciar la demo"
       >
         <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" aria-hidden="true">
           <path d="M2 5h5M11 5h3M2 11h3M9 11h5" />
@@ -39,11 +44,6 @@ export function VerComo({ ruta, conNav }: { ruta: string; conNav: boolean }) {
     cambiarPerfil(nueva)
     if (!rutaExiste(ruta, CONFIG.perfiles[nueva].grupo)) navegar(RUTAS.inicio)
     setAbierto(false)
-  }
-
-  const alReiniciar = () => {
-    reiniciar()
-    navegar(RUTAS.config)
   }
 
   const posicion = conNav ? 'vercomo--sobre-nav' : ''
