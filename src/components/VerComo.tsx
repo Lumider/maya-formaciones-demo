@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { createPortal } from 'react-dom'
 import { CONFIG, type Sigla } from '../config/demo.config'
 import { navegar, rutaExiste, RUTAS } from '../state/router'
@@ -15,12 +15,7 @@ export function VerComo({ ruta, conNav }: { ruta: string; conNav: boolean }) {
   const [abierto, setAbierto] = useState(false)
 
   // Con un modal u hoja abierta el panel se oculta para no tapar los botones.
-  const oculto = !sesion?.mostrarPanel || hayHojaAbierta
-  useEffect(() => {
-    if (oculto) setAbierto(false)
-  }, [oculto])
-
-  if (!capa || oculto) return null
+  if (!capa || !sesion?.mostrarPanel || hayHojaAbierta) return null
 
   const elegir = (nueva: Sigla) => {
     cambiarPerfil(nueva)
