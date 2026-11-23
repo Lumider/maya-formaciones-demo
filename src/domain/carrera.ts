@@ -33,6 +33,17 @@ export function campanasParaElSueno(monto: number | null): number | null {
   return Math.ceil(monto / montoLocal(CONFIG.gananciaDirectora))
 }
 
+/** Respuesta simulada de la Directora madre al mensaje de la Emprendedora. */
+export function respuestaDeDirectora(args: { nombre: string; perfil: Perfil; sueno: Sueno | null }): string {
+  const { nombre, perfil, sueno } = args
+  const saludo = `¡Hola ${nombre}! 😊 Qué alegría leerte.`
+  if (!sueno) {
+    return `${saludo} Claro que sí, con gusto te explico cómo funciona la carrera Yanbal. ¿Te llamo hoy en la tarde y lo vemos juntas?`
+  }
+  const siguiente = siguienteNivel(perfil)?.nombre ?? 'Directora'
+  return `${saludo} Me encanta tu sueño y voy a acompañarte a lograrlo 💪 Armemos juntas tu plan para llegar a ${siguiente}. ¿Te llamo hoy en la tarde y lo vemos?`
+}
+
 /** Mensaje precargado de "Habla con tu Directora". */
 export function mensajeADirectora(args: {
   nombre: string

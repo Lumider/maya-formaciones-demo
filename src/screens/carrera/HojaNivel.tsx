@@ -46,7 +46,7 @@ export function HojaNivel({ indice, onCambiar, onCerrar, onHablar }: Props) {
             onfryClick={() => onCambiar(actual + 1)}
           />
         ) : (
-          <fry-button hierarchy="primary" full-width text="Habla con tu Directora" onfryClick={onHablar} />
+          <fry-button hierarchy="primary" full-width icon-left="whatsapp-outline" text="Habla con tu Directora" onfryClick={onHablar} />
         )
       }
     >

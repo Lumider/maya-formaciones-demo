@@ -20,6 +20,8 @@ interface Props {
   mensaje: string
   etiquetaVolver: string
   onVolver: () => void
+  /** Respuesta simulada del contacto: llega sola unos segundos después del primer envío. */
+  respuesta?: string
   /** Se llama al enviar el mensaje (p. ej. para acompañarlo con un sonido). */
   alEnviar?: () => void
 }
@@ -28,18 +30,20 @@ interface Props {
  * Pantalla que simula un chat de WhatsApp dentro de la demo.
  * Nunca abre WhatsApp real ni envía mensajes de verdad.
  */
-export function ChatSimulado({ chatId, contacto, subtitulo, mensaje, etiquetaVolver, onVolver, alEnviar }: Props) {
+export function ChatSimulado({ chatId, contacto, subtitulo, mensaje, respuesta, etiquetaVolver, onVolver, alEnviar }: Props) {
   const { mio, enviarMensaje } = useDemo()
   const enviados = mio.chats[chatId] ?? []
-  const ultimo = enviados[enviados.length - 1]
+  const propios = enviados.filter((m) => !m.recibido)
+  const ultimo = propios[propios.length - 1]
   // La caja queda vacía tras enviar; si el mensaje cambió (p. ej. editó su sueño), vuelve a precargarse.
   const [borrador, setBorrador] = useState(ultimo?.texto === mensaje ? '' : mensaje)
   const [recienEnviado, setRecienEnviado] = useState(false)
+  const [escribiendo, setEscribiendo] = useState(false)
   const finRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     finRef.current?.scrollIntoView({ block: 'end' })
-  }, [enviados.length])
+  }, [enviados.length, escribiendo])
 
   const enviar = () => {
     if (!borrador) return
@@ -47,6 +51,14 @@ export function ChatSimulado({ chatId, contacto, subtitulo, mensaje, etiquetaVol
     setBorrador('')
     setRecienEnviado(true)
     alEnviar?.()
+    // La respuesta se finge una sola vez por chat. Llega aunque la usuaria salga de la pantalla.
+    if (respuesta && !enviados.some((m) => m.recibido)) {
+      setTimeout(() => setEscribiendo(true), 1200)
+      setTimeout(() => {
+        setEscribiendo(false)
+        enviarMensaje(chatId, { texto: respuesta, hora: horaChat(new Date()), recibido: true })
+      }, 3600)
+    }
   }
 
   return (
@@ -60,7 +72,7 @@ export function ChatSimulado({ chatId, contacto, subtitulo, mensaje, etiquetaVol
         </span>
         <span className="chat__contacto">
           <b>{contacto}</b>
-          <span>{subtitulo}</span>
+          <span>{escribiendo ? 'escribiendo…' : subtitulo}</span>
         </span>
         <img src={video} alt="" width={24} height={24} />
         <img src={llamada} alt="" width={24} height={24} />
@@ -69,17 +81,26 @@ export function ChatSimulado({ chatId, contacto, subtitulo, mensaje, etiquetaVol
       <div className="chat__mensajes">
         <span className="chat__fecha">Hoy</span>
         {enviados.map((m, i) => (
-          <div className="burbuja" key={i}>
+          <div className={`burbuja ${m.recibido ? 'burbuja--recibida' : ''}`} key={i}>
             <div className="burbuja__cuerpo">
               <p>{m.texto}</p>
               <span className="burbuja__meta">
                 {m.hora}
-                <img src={dobleCheck} alt="Entregado" width={15} height={14} />
+                {!m.recibido && <img src={dobleCheck} alt="Entregado" width={15} height={14} />}
               </span>
             </div>
-            <img className="burbuja__cola" src={cola} alt="" width={8} height={15} />
+            {!m.recibido && <img className="burbuja__cola" src={cola} alt="" width={8} height={15} />}
           </div>
         ))}
+        {escribiendo && (
+          <div className="burbuja burbuja--recibida" aria-label={`${contacto} está escribiendo`}>
+            <div className="burbuja__cuerpo burbuja__puntos">
+              <i />
+              <i />
+              <i />
+            </div>
+          </div>
+        )}
         <div ref={finRef} />
       </div>
 

@@ -1,5 +1,5 @@
 import { ChatSimulado } from '../components/ChatSimulado'
-import { mensajeADirectora } from '../domain/carrera'
+import { mensajeADirectora, respuestaDeDirectora } from '../domain/carrera'
 import { navegar, RUTAS } from '../state/router'
 import { useDemo } from '../state/store'
 
@@ -17,6 +17,7 @@ export function ChatDirectora() {
         perfil,
         sueno: mio.sueno,
       })}
+      respuesta={respuestaDeDirectora({ nombre: sesion?.nombre ?? '', perfil, sueno: mio.sueno })}
       etiquetaVolver="Volver a Mi carrera"
       onVolver={() => navegar(RUTAS.miCarrera)}
       alEnviar={() => sonar('enviar')}

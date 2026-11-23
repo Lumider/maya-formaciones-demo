@@ -174,3 +174,33 @@
   border-radius: 50%;
   background: #007aff;
 }
+
+/* Respuesta simulada del contacto */
+.burbuja--recibida {
+  align-self: flex-start;
+}
+.burbuja--recibida .burbuja__cuerpo {
+  background: #fff;
+}
+.burbuja__puntos {
+  display: flex;
+  gap: 4px;
+  padding: 14px;
+}
+.burbuja__puntos i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.35);
+  animation: punto 1s infinite ease-in-out;
+}
+.burbuja__puntos i:nth-child(2) {
+  animation-delay: 0.15s;
+}
+.burbuja__puntos i:nth-child(3) {
+  animation-delay: 0.3s;
+}
+@keyframes punto {
+  0%, 60%, 100% { opacity: 0.35; transform: none; }
+  30% { opacity: 1; transform: translateY(-3px); }
+}

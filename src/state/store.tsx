@@ -21,6 +21,8 @@ export interface Sesion {
 export interface MensajeEnviado {
   texto: string
   hora: string
+  /** true = respuesta simulada del contacto (burbuja entrante). */
+  recibido?: boolean
 }
 
 /** Estado propio de cada perfil; cambiar de perfil no borra el de los otros. */
