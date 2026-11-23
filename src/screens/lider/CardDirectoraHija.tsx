@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { EtiquetaPotencial } from '../../components/EtiquetaPotencial'
 import type { DirectoraEvaluada, EmprendedoraEvaluada } from '../../domain/lideres'
-import { soles } from '../../domain/format'
+import { dinero } from '../../domain/format'
 import { primerNombre, TEXTO_INTENCION } from '../../domain/potencial'
 import { navegar, RUTAS } from '../../state/router'
 import { useDemo } from '../../state/store'
@@ -72,7 +72,7 @@ export function CardDirectoraHija({ directora, abiertaPorDefecto, onContactar, o
                 Califica como {e.nombreNivel}
               </p>
               <p>{TEXTO_INTENCION[e.intencion]}</p>
-              <p>Venta GP: {soles(e.actual.ventaGP)}</p>
+              <p>Venta GP: {dinero(e.actual.ventaGP)}</p>
               <p>Total de Activas: {e.actual.activas}</p>
               <p>PPED: {e.actual.pped}</p>
               <p>IM: {e.actual.im.toFixed(1)}%</p>

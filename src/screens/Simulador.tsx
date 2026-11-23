@@ -3,7 +3,7 @@ import { NotaLegal } from '../components/NotaLegal'
 import { PreguntasPlan } from '../components/PreguntasPlan'
 import { CONFIG } from '../config/demo.config'
 import { indiceNivel } from '../domain/carrera'
-import { soles } from '../domain/format'
+import { dinero, dineroLocal } from '../domain/format'
 import { etiquetaCampana, simularPlan } from '../domain/simulador'
 import { navegar, RUTAS } from '../state/router'
 import { useDemo } from '../state/store'
@@ -74,7 +74,7 @@ export function Simulador() {
           </span>
           <div>
             <b>Hoy · {nivelActual.nombre}</b>
-            {perfil.gananciaActual !== null && <p>Tu ganancia estimada: {soles(perfil.gananciaActual)} por campaña</p>}
+            {perfil.gananciaActual !== null && <p>Tu ganancia estimada: {dinero(perfil.gananciaActual)} por campaña</p>}
           </div>
         </li>
         {plan.etapas.map((e) => {
@@ -91,7 +91,7 @@ export function Simulador() {
                     ? `${etiquetaCampana(e.desde)} · 1 campaña`
                     : `De ${etiquetaCampana(e.desde)} a ${etiquetaCampana(e.hasta)} · ${e.campanas} campañas`}
                 </p>
-                <p>Mientras tanto ganarías {soles(e.ganancia)} por campaña*</p>
+                <p>Mientras tanto ganarías {dinero(e.ganancia)} por campaña*</p>
                 <button className="plan__enlace" onClick={() => {
                     sonar('abrir')
                     setNivelAbierto(e.indiceNivel)
@@ -105,7 +105,7 @@ export function Simulador() {
         <li className="plan__llegada">
           <b>¡Directora desde {etiquetaCampana(plan.llegada)}!</b>
           <p>
-            Ganarías <b>desde {soles(CONFIG.gananciaDirectora)} por campaña*</b>
+            Ganarías <b>desde {dinero(CONFIG.gananciaDirectora)} por campaña*</b>
           </p>
         </li>
       </ol>
@@ -117,7 +117,7 @@ export function Simulador() {
             <b>Tu sueño: {sueno.texto}</b>
             {sueno.monto !== null && plan.campanaMeta !== null && (
               <p>
-                Con este plan juntarías tu meta de {soles(sueno.monto)} en <b>{etiquetaCampana(plan.campanaMeta)}</b>
+                Con este plan juntarías tu meta de {dineroLocal(sueno.monto)} en <b>{etiquetaCampana(plan.campanaMeta)}</b>
                 {plan.campanaMeta < plan.llegada ? ', antes de ser Directora.' : ', ya como Directora.'}
               </p>
             )}

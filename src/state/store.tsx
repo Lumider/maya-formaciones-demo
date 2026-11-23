@@ -1,5 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useReducer, type ReactNode } from 'react'
-import { CONFIG, esSigla, type Perfil, type Sigla } from '../config/demo.config'
+import { CONFIG, esSigla, type Pais, type Perfil, type Sigla } from '../config/demo.config'
+import { fijarPais } from '../domain/format'
 import type { Sueno } from '../domain/carrera'
 import type { FiltroFormaciones } from '../domain/formaciones'
 import type { Potencial } from '../domain/potencial'
@@ -13,6 +14,8 @@ export interface Sesion {
   /** Directora madre ingresada en la configuración ('' = usar la del config). */
   directora: string
   mostrarPanel: boolean
+  /** País de la sesión: define la moneda y los montos. */
+  pais: Pais
 }
 
 export interface MensajeEnviado {
@@ -178,6 +181,9 @@ const Contexto = createContext<Demo | null>(null)
 
 export function DemoProvider({ children }: { children: ReactNode }) {
   const [estado, despachar] = useReducer(reductor, undefined, () => estadoInicial())
+
+  // Los montos se formatean según el país de la sesión (las guardadas sin país son de Perú).
+  fijarPais(estado.sesion?.pais ?? CONFIG.paisPorDefecto)
 
   useEffect(() => {
     const { sonido, sesion, perfil, porPerfil } = estado

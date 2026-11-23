@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { CONFIG, SIGLAS, type Sigla } from '../config/demo.config'
+import { CONFIG, SIGLAS, type Pais, type Sigla } from '../config/demo.config'
 import { normalizarNombre } from '../domain/format'
 import { navegar, RUTAS } from '../state/router'
 import { useDemo } from '../state/store'
@@ -9,6 +9,7 @@ export function ConfigScreen() {
   const { sesion, sigla, iniciar } = useDemo()
   const [nombre, setNombre] = useState(sesion?.nombre ?? '')
   const [estatus, setEstatus] = useState<Sigla | null>(sesion ? sigla : null)
+  const [pais, setPais] = useState<Pais>(sesion?.pais ?? CONFIG.paisPorDefecto)
   const [directora, setDirectora] = useState(sesion?.directora ?? '')
   const [mostrarPanel, setMostrarPanel] = useState(sesion?.mostrarPanel ?? true)
 
@@ -22,6 +23,7 @@ export function ConfigScreen() {
         nombre: normalizarNombre(nombre),
         directora: esEmprendedora ? normalizarNombre(directora) : '',
         mostrarPanel,
+        pais,
       },
       estatus,
     )
@@ -45,6 +47,25 @@ export function ConfigScreen() {
           onChange={(e) => setNombre(e.target.value)}
         />
       </label>
+
+      <div className="campo">
+        <span className="campo__etiqueta">País</span>
+        <div className="config__estatus" role="radiogroup" aria-label="País">
+          {(Object.keys(CONFIG.paises) as Pais[]).map((p) => (
+            <fry-chip
+              key={p}
+              type="choice"
+              size="medium"
+              name="pais"
+              label={CONFIG.paises[p].nombre}
+              value={p}
+              checked={pais === p}
+              onfryChange={() => setPais(p)}
+            />
+          ))}
+        </div>
+        <p className="t-sutil config__descripcion">Los montos se muestran en {CONFIG.paises[pais].simbolo}</p>
+      </div>
 
       <div className="campo">
         <span className="campo__etiqueta">Estatus</span>

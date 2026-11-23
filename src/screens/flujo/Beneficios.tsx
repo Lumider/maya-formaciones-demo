@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { HojaInferior } from '../../components/HojaInferior'
 import { NotaLegal } from '../../components/NotaLegal'
 import { CONFIG } from '../../config/demo.config'
-import { soles } from '../../domain/format'
+import { dinero } from '../../domain/format'
 import { useDemo } from '../../state/store'
 import foto from '../../assets/figma/modal-1/photo-directora.jpg'
 import bolsa from '../../assets/figma/modal-1/moneybag.png'
@@ -76,10 +76,10 @@ export function Beneficios({ onMasAdelante, onQuiero }: Props) {
 
           <div className="flujo__cabecera">
             <h2 className="flujo__titulo">
-              Así una Directora gana desde <span className="acento">{soles(CONFIG.gananciaDirectora)} por campaña*</span>
+              Así una Directora gana desde <span className="acento">{dinero(CONFIG.gananciaDirectora)} por campaña*</span>
             </h2>
             <p className="flujo__apoyo">
-              Hoy tu ganancia estimada es {soles(perfil.gananciaActual ?? 0)}. Además tendrías otros beneficios:
+              Hoy tu ganancia estimada es {dinero(perfil.gananciaActual ?? 0)}. Además tendrías otros beneficios:
             </p>
           </div>
         </>

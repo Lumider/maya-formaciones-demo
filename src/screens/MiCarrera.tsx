@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { NotaLegal } from '../components/NotaLegal'
 import { CONFIG } from '../config/demo.config'
-import { soles } from '../domain/format'
+import { dinero, dineroLocal } from '../domain/format'
 import { reproducir } from '../domain/sonido'
 import { navegar, RUTAS } from '../state/router'
 import { useDemo } from '../state/store'
@@ -33,7 +33,7 @@ export function MiCarrera() {
           <div className="sueno-card__texto">
             <span className="sueno-card__etiqueta">Tu sueño</span>
             <b>{sueno.texto}</b>
-            {sueno.monto !== null && <span>Meta: {soles(sueno.monto)}</span>}
+            {sueno.monto !== null && <span>Meta: {dineroLocal(sueno.monto)}</span>}
           </div>
           <button className="sueno-card__editar" onClick={() => {
               sonar('toque')
@@ -50,7 +50,7 @@ export function MiCarrera() {
             </span>
             <p className="rumbo__titulo">Rumbo hacia Directora</p>
             <p className="rumbo__frase">
-              Puedes ganar <b>desde {soles(CONFIG.gananciaDirectora)}</b> por campaña*
+              Puedes ganar <b>desde {dinero(CONFIG.gananciaDirectora)}</b> por campaña*
             </p>
             <fry-button
               hierarchy="primary"

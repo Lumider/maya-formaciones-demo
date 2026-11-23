@@ -1,6 +1,6 @@
 import type { Metricas } from '../../config/demo.config'
 import { avisoDeCandidata, type CandidataEvaluada } from '../../domain/formaciones'
-import { soles } from '../../domain/format'
+import { dinero } from '../../domain/format'
 import { cumpleVariable, primerNombre } from '../../domain/potencial'
 import { navegar, RUTAS } from '../../state/router'
 import { useDemo } from '../../state/store'
@@ -41,7 +41,7 @@ export function CardCandidata({ candidata, destacada, enviado, onContactar }: Pr
         <ul className="candidata__filas">
           {FILAS.map((f) => (
             <FilaEstado key={f.variable} ok={cumpleVariable(candidata, f.variable)}>
-              {f.etiqueta}: {f.moneda ? soles(candidata[f.variable]) : candidata[f.variable]}
+              {f.etiqueta}: {f.moneda ? dinero(candidata[f.variable]) : candidata[f.variable]}
             </FilaEstado>
           ))}
           <FilaEstado ok={candidata.suenoRegistrado !== null}>

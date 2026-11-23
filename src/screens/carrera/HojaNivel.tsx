@@ -2,7 +2,7 @@ import { HojaInferior } from '../../components/HojaInferior'
 import { NotaLegal } from '../../components/NotaLegal'
 import { CONFIG } from '../../config/demo.config'
 import { estadoNodo, indiceNivel, type EstadoNodo } from '../../domain/carrera'
-import { soles } from '../../domain/format'
+import { conMontos, dinero } from '../../domain/format'
 import { useDemo } from '../../state/store'
 
 const ETIQUETAS: Record<EstadoNodo, string> = {
@@ -57,7 +57,7 @@ export function HojaNivel({ indice, onCambiar, onCerrar, onHablar }: Props) {
 
         {estado === 'actual' && perfil.gananciaActual !== null && (
           <p className="nivel__ganancia">
-            Tu ganancia estimada actual: <b>{soles(perfil.gananciaActual)}</b>
+            Tu ganancia estimada actual: <b>{dinero(perfil.gananciaActual)}</b>
           </p>
         )}
         {conGananciaReferencial && (
@@ -65,7 +65,7 @@ export function HojaNivel({ indice, onCambiar, onCerrar, onHablar }: Props) {
             Ganancia referencial:{' '}
             <b>
               {nivel.gananciaDesde ? 'desde ' : ''}
-              {soles(nivel.gananciaReferencial ?? 0)} por campaña*
+              {dinero(nivel.gananciaReferencial ?? 0)} por campaña*
             </b>
           </p>
         )}
@@ -78,7 +78,7 @@ export function HojaNivel({ indice, onCambiar, onCerrar, onHablar }: Props) {
               {nivel.requisitos.map((r) => (
                 <li key={r}>
                   {logrado && <fry-icon name="check-outline" size="20" color="#1f8a70" />}
-                  <span>{r}</span>
+                  <span>{conMontos(r)}</span>
                 </li>
               ))}
             </ul>

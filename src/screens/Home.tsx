@@ -1,6 +1,6 @@
 import { NotaLegal } from '../components/NotaLegal'
 import { CONFIG } from '../config/demo.config'
-import { soles } from '../domain/format'
+import { dinero } from '../domain/format'
 import { navegar, RUTAS } from '../state/router'
 import { useDemo } from '../state/store'
 import caja from '../assets/figma/home/ql-box.png'
@@ -32,13 +32,13 @@ export function Home() {
   const { campana } = perfil
 
   const indicadores = [
-    { etiqueta: 'Venta de GP', valor: soles(campana.ventaGP), icono: indVenta },
+    { etiqueta: 'Venta de GP', valor: dinero(campana.ventaGP), icono: indVenta },
     ...(perfil.gananciaActual !== null
-      ? [{ etiqueta: 'Ganancia estimada', valor: soles(perfil.gananciaActual), icono: indGanancia, destacado: true }]
+      ? [{ etiqueta: 'Ganancia estimada', valor: dinero(perfil.gananciaActual), icono: indGanancia, destacado: true }]
       : []),
     { etiqueta: 'Activas del grupo', valor: String(campana.activasGrupo), icono: indActivas, clase: 'indicador__icono--activas' },
-    { etiqueta: 'Deuda actual', valor: soles(campana.deudaActual), icono: indDeuda },
-    { etiqueta: 'Crédito Yanbal', valor: soles(campana.creditoYanbal), icono: indCredito, clase: 'indicador__icono--credito' },
+    { etiqueta: 'Deuda actual', valor: dinero(campana.deudaActual), icono: indDeuda },
+    { etiqueta: 'Crédito Yanbal', valor: dinero(campana.creditoYanbal), icono: indCredito, clase: 'indicador__icono--credito' },
   ]
 
   // Banner de carrera: solo Emprendedoras que aún no registran su sueño.
@@ -104,7 +104,7 @@ export function Home() {
               <span className="anuncio__texto">
                 <span className="anuncio__etiqueta">Carrera Yanbal</span>
                 <span>
-                  Con la Carrera Yanbal puedes ganar <b>desde {soles(CONFIG.gananciaDirectora)} por campaña*</b>
+                  Con la Carrera Yanbal puedes ganar <b>desde {dinero(CONFIG.gananciaDirectora)} por campaña*</b>
                 </span>
               </span>
               <span className="anuncio__foto">
@@ -117,7 +117,7 @@ export function Home() {
               <span className="anuncio__texto">
                 <span className="anuncio__etiqueta">Formaciones</span>
                 <span>
-                  Forma a una nueva Directora y gana <b>+{soles(CONFIG.bonoFormacion)}*</b>
+                  Forma a una nueva Directora y gana <b>+{dinero(CONFIG.bonoFormacion)}*</b>
                 </span>
               </span>
               <span className="anuncio__circulo">

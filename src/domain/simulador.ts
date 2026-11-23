@@ -1,4 +1,5 @@
 import { CONFIG, type Nivel, type NivelId, type Sigla } from '../config/demo.config'
+import { montoLocal } from './format'
 
 /** Campaña absoluta (C1 del año actual = 1) → "C4" este año, "C4 (2027)" si cruza de año. */
 export function etiquetaCampana(absoluta: number): string {
@@ -51,6 +52,7 @@ export function simularPlan(
   let cursor = inicio
   let acumulado = 0
   let campanaMeta: number | null = null
+  // La meta del sueño está en la moneda del país, así que se acumula en esa moneda.
   let ganancia = perfil.gananciaActual ?? 0
 
   CONFIG.niveles.forEach((nivel, indiceNivel) => {
@@ -58,7 +60,7 @@ export function simularPlan(
     if (!campanas) return
     etapas.push({ nivel, indiceNivel, desde: cursor, hasta: cursor + campanas - 1, campanas, ganancia })
     for (let i = 0; i < campanas; i++) {
-      acumulado += ganancia
+      acumulado += montoLocal(ganancia)
       if (campanaMeta === null && meta !== null && acumulado >= meta) campanaMeta = cursor + i
     }
     cursor += campanas
@@ -67,7 +69,7 @@ export function simularPlan(
 
   // Si la meta no se alcanza antes, se sigue sumando ya como Directora.
   if (campanaMeta === null && meta !== null && meta > acumulado) {
-    campanaMeta = cursor + Math.ceil((meta - acumulado) / CONFIG.gananciaDirectora) - 1
+    campanaMeta = cursor + Math.ceil((meta - acumulado) / montoLocal(CONFIG.gananciaDirectora)) - 1
   }
 
   return { inicio, llegada: cursor, campanas: cursor - inicio, etapas, campanaMeta }

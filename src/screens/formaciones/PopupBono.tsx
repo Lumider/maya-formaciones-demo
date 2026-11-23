@@ -3,7 +3,7 @@ import { NotaLegal } from '../../components/NotaLegal'
 import { EtiquetaPotencial } from '../../components/EtiquetaPotencial'
 import { CONFIG } from '../../config/demo.config'
 import { mejoresCandidatas, type CandidataEvaluada } from '../../domain/formaciones'
-import { soles } from '../../domain/format'
+import { dinero } from '../../domain/format'
 import { useDemo } from '../../state/store'
 
 interface Props {
@@ -39,7 +39,7 @@ export function PopupBono({ candidatas, onCerrar, onVerListas, onInvitar, onEleg
         <div className="bono__cabecera">
           <span className="bono__etiqueta">Bono de formación</span>
           <p>Forma a una nueva Directora y gana</p>
-          <p className="bono__monto">+{soles(CONFIG.bonoFormacion)}*</p>
+          <p className="bono__monto">+{dinero(CONFIG.bonoFormacion)}*</p>
         </div>
       }
       pie={

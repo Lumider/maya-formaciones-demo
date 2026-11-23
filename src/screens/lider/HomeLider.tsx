@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { CONFIG } from '../../config/demo.config'
 import { directorasConPotencialAlto } from '../../domain/lideres'
-import { soles } from '../../domain/format'
+import { dinero } from '../../domain/format'
 import { navegar, RUTAS } from '../../state/router'
 import { useDemo } from '../../state/store'
 import caja from '../../assets/figma/home/ql-box.png'
@@ -13,14 +13,14 @@ import chevron from '../../assets/figma/home/chevron-right.svg'
 import deuda from '../../assets/figma/home/ind-deuda.png'
 import credito from '../../assets/figma/home/ind-credito.png'
 import sueno from '../../assets/figma/lid/ind-sueno.png'
-import dinero from '../../assets/figma/lid/ind-money-04.png'
+import bolsaDinero from '../../assets/figma/lid/ind-money-04.png'
 import liderPoderosa from '../../assets/figma/lid/ind-lider-poderosa.png'
 import check from '../../assets/figma/lid/ind-check.png'
 import primerosPedidos from '../../assets/figma/lid/ind-primeros-pedidos.png'
 import morosidad from '../../assets/figma/lid/ind-statistics-02.png'
 import cuadrante from '../../assets/figma/lid/ind-statistics-03.png'
 
-const ICONOS: Record<string, string> = { sueno, dinero, liderPoderosa, check, primerosPedidos, morosidad, deuda, cuadrante, credito }
+const ICONOS: Record<string, string> = { sueno, dinero: bolsaDinero, liderPoderosa, check, primerosPedidos, morosidad, deuda, cuadrante, credito }
 
 const ACCESOS = [
   { etiqueta: 'Realizar pedido', icono: caja },
@@ -77,7 +77,7 @@ export function HomeLider() {
                 <img className="indicador__chevron" src={chevron} alt="" />
               </span>
               <span className="indicador__etiqueta">{i.etiqueta}</span>
-              <b className="indicador__valor">{typeof i.valor === 'number' && i.moneda ? soles(i.valor) : i.valor}</b>
+              <b className="indicador__valor">{typeof i.valor === 'number' && i.moneda ? dinero(i.valor) : i.valor}</b>
             </li>
           ))}
         </ul>

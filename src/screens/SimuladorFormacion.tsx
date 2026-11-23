@@ -4,7 +4,7 @@ import { NotaLegal } from '../components/NotaLegal'
 import { PreguntasPlan } from '../components/PreguntasPlan'
 import { CONFIG, type NivelId } from '../config/demo.config'
 import { candidatasDe } from '../domain/formaciones'
-import { soles } from '../domain/format'
+import { dinero } from '../domain/format'
 import { directorasHijas } from '../domain/lideres'
 import { primerNombre, type Potencial } from '../domain/potencial'
 import { etiquetaCampana, siglaDeNivel, simularPlan } from '../domain/simulador'
@@ -175,7 +175,7 @@ export function SimuladorFormacion({ id }: { id: string }) {
             )
           ) : (
             <p>
-              Recibes tu bono de formación de <b>{soles(CONFIG.bonoFormacion)}*</b> y ganas una nueva Directora hija.
+              Recibes tu bono de formación de <b>{dinero(CONFIG.bonoFormacion)}*</b> y ganas una nueva Directora hija.
             </p>
           )}
         </li>

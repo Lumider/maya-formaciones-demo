@@ -1,11 +1,37 @@
-/** "S/21,200": sin espacio y con coma de miles. */
-export function soles(monto: number): string {
-  return 'S/' + Math.round(monto).toLocaleString('en-US')
+import { CONFIG, type DatosPais, type Pais } from '../config/demo.config'
+
+// País activo de la sesión. Lo fija el estado de la demo antes de dibujar cada pantalla,
+// así todos los montos salen de una sola función.
+let pais: Pais = CONFIG.paisPorDefecto
+
+export function fijarPais(nuevo: Pais): void {
+  pais = nuevo
 }
 
-/** Miles con coma, sin símbolo: "21,200". */
-export function miles(monto: number): string {
-  return Math.round(monto).toLocaleString('en-US')
+export function datosPais(): DatosPais {
+  return CONFIG.paises[pais]
+}
+
+/** Lleva un monto del config (en soles) a la moneda del país activo. */
+export function montoLocal(montoEnSoles: number): number {
+  const { factor, montosAdaptados } = datosPais()
+  return montosAdaptados[montoEnSoles] ?? Math.round(montoEnSoles * factor)
+}
+
+/** Monto ya expresado en la moneda del país (p. ej. la meta que escribe la usuaria): "S/8,000", "$2.400". */
+export function dineroLocal(monto: number): string {
+  const { simbolo, separadorMiles } = datosPais()
+  return simbolo + String(Math.round(monto)).replace(/\B(?=(\d{3})+(?!\d))/g, separadorMiles)
+}
+
+/** Monto del config (en soles) en la moneda del país: "S/21,200" en Perú, "$6.360" en Ecuador. */
+export function dinero(montoEnSoles: number): string {
+  return dineroLocal(montoLocal(montoEnSoles))
+}
+
+/** Reemplaza los montos entre llaves de un texto del config: "Ganamás ({470})" → "Ganamás (S/470)". */
+export function conMontos(texto: string): string {
+  return texto.replace(/\{(\d+)\}/g, (_, monto: string) => dinero(Number(monto)))
 }
 
 /** "luciana  " → "Luciana": sin espacios sobrantes y con la primera letra en mayúscula. */

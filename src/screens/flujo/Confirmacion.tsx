@@ -2,7 +2,7 @@ import { HojaInferior } from '../../components/HojaInferior'
 import { NotaLegal } from '../../components/NotaLegal'
 import { CONFIG } from '../../config/demo.config'
 import { campanasParaElSueno } from '../../domain/carrera'
-import { soles } from '../../domain/format'
+import { dinero, dineroLocal } from '../../domain/format'
 import { useDemo } from '../../state/store'
 import foto from '../../assets/figma/modal-1/photo-directora.jpg'
 import bolsa from '../../assets/figma/modal-1/moneybag.png'
@@ -14,7 +14,7 @@ export function Confirmacion({ onSalir }: { onSalir: () => void }) {
   const sueno = mio.sueno
   if (!sueno) return null
 
-  const cifra = soles(CONFIG.gananciaDirectora)
+  const cifra = dinero(CONFIG.gananciaDirectora)
   const campanas = campanasParaElSueno(sueno.monto)
 
   return (
@@ -35,7 +35,7 @@ export function Confirmacion({ onSalir }: { onSalir: () => void }) {
         <h2 className="flujo__titulo">¡Tu sueño ya tiene un camino!</h2>
         <p className="flujo__apoyo">
           {sueno.texto}
-          {sueno.monto !== null && ` | Meta: ${soles(sueno.monto)}`}
+          {sueno.monto !== null && ` | Meta: ${dineroLocal(sueno.monto)}`}
           <br />
           Así te acercas siendo Directora:
         </p>

@@ -1,5 +1,5 @@
 import { CONFIG, type Nivel, type Perfil } from '../config/demo.config'
-import { minusculaInicial } from './format'
+import { minusculaInicial, montoLocal } from './format'
 
 export type EstadoNodo = 'anterior' | 'actual' | 'siguiente' | 'masAdelante'
 
@@ -29,7 +29,8 @@ export function siguienteNivel(perfil: Perfil): Nivel | null {
 /** Campañas para alcanzar el sueño ganando la cifra de Directora. null si no hay monto. */
 export function campanasParaElSueno(monto: number | null): number | null {
   if (!monto || monto <= 0) return null
-  return Math.ceil(monto / CONFIG.gananciaDirectora)
+  // La meta está en la moneda del país; la ganancia del config, en soles.
+  return Math.ceil(monto / montoLocal(CONFIG.gananciaDirectora))
 }
 
 /** Mensaje precargado de "Habla con tu Directora". */

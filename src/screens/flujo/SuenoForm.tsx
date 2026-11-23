@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { HojaInferior } from '../../components/HojaInferior'
 import { CONFIG } from '../../config/demo.config'
-import { soles } from '../../domain/format'
+import { datosPais, dinero } from '../../domain/format'
 import { useDemo } from '../../state/store'
 
 interface Props {
@@ -59,7 +59,7 @@ export function SuenoForm({ editando, onCerrar, onAtras, onGuardado }: Props) {
           soñar en grande!
         </h2>
         <p className="flujo__apoyo">
-          Como Directora podrías ganar desde {soles(CONFIG.gananciaDirectora)} por campaña. ¿Qué gran sueño quieres
+          Como Directora podrías ganar desde {dinero(CONFIG.gananciaDirectora)} por campaña. ¿Qué gran sueño quieres
           cumplir?
         </p>
       </div>
@@ -98,7 +98,7 @@ export function SuenoForm({ editando, onCerrar, onAtras, onGuardado }: Props) {
 
         <h3 className="flujo__titulo sueno__pregunta">¿Cuánto cuesta ese sueño?</h3>
         <fry-input-currency
-          currency="PEN"
+          currency={datosPais().moneda}
           integer
           name="monto"
           placeholder="Ingresa el monto aproximado"

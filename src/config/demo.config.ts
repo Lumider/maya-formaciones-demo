@@ -4,6 +4,26 @@
  * Ningún número se escribe directo en los componentes.
  */
 
+/** Países de la demo. Los montos del config están en soles (Perú) y se adaptan por país. */
+export type Pais = 'PE' | 'EC'
+
+export interface DatosPais {
+  nombre: string
+  /** Símbolo que antecede al monto, sin espacio. */
+  simbolo: string
+  /** Separador de miles: "S/1,820" en Perú, "$6.360" en Ecuador (igual que el campo de monto de FrYDA). */
+  separadorMiles: string
+  /** Código de moneda del campo de monto de FrYDA. */
+  moneda: string
+  /** Factor para llevar un monto en soles a la moneda del país (1 = sin cambio). */
+  factor: number
+  /**
+   * Montos adaptados al país que NO salen del factor: clave = monto en soles del config,
+   * valor = monto en la moneda local. Tienen prioridad sobre el factor.
+   */
+  montosAdaptados: Record<number, number>
+}
+
 export type Sigla = 'CNS' | 'CEM' | 'CES' | 'JNR' | 'SNR' | 'SSE' | 'REG'
 export type Grupo = 'emprendedora' | 'directora' | 'lider'
 export type NivelId = 'consultora' | 'cem' | 'cemSenior' | 'aspirante' | 'directora'
@@ -12,7 +32,7 @@ export interface Nivel {
   id: NivelId
   nombre: string
   descripcion: string
-  /** Qué se necesita para llegar a este nivel. */
+  /** Qué se necesita para llegar a este nivel. Los montos van entre llaves, en soles: "{470}". */
   requisitos: string[]
   /** Aclaración que acompaña a los requisitos (opcional). */
   notaRequisitos?: string
@@ -111,6 +131,21 @@ export interface Perfil {
 }
 
 export const CONFIG = {
+  paisPorDefecto: 'PE' as Pais,
+  paises: {
+    PE: { nombre: 'Perú', simbolo: 'S/', separadorMiles: ',', moneda: 'PEN', factor: 1, montosAdaptados: {} },
+    EC: {
+      nombre: 'Ecuador',
+      simbolo: '$',
+      separadorMiles: '.',
+      moneda: 'USD',
+      // TODO: PROVISIONAL. Factor tomado de la equivalencia S/50 ≈ $15 de la base de conocimiento.
+      // Reemplazar por los montos adaptados a Ecuador (aquí en `montosAdaptados`).
+      factor: 0.3,
+      montosAdaptados: {},
+    },
+  } satisfies Record<Pais, DatosPais> as Record<Pais, DatosPais>,
+
   campana: {
     actual: 11,
     etiqueta: 'Campaña 11',
@@ -237,7 +272,7 @@ export const CONFIG = {
       id: 'cem',
       nombre: 'CEM',
       descripcion: 'Además de vender, incorporas nuevas consultoras y ganas por cada una.',
-      requisitos: ['Venta personal en Nivel 1 de Ganamás (S/470)', '1 nueva consultora activa en Nivel 1'],
+      requisitos: ['Venta personal en Nivel 1 de Ganamás ({470})', '1 nueva consultora activa en Nivel 1'],
       gananciaReferencial: 600,
     },
     {
@@ -246,10 +281,10 @@ export const CONFIG = {
       descripcion: 'Lideras tu propio grupo y ganas un porcentaje de sus ventas.',
       notaRequisitos: 'En una misma campaña:',
       requisitos: [
-        'Venta personal en Nivel 1 de Ganamás (S/470)',
+        'Venta personal en Nivel 1 de Ganamás ({470})',
         '2 primeros pedidos directos',
         '5 activas directas',
-        'Venta de Grupo Personal de S/6,000',
+        'Venta de Grupo Personal de {6000}',
       ],
       gananciaReferencial: 970,
     },
@@ -270,7 +305,7 @@ export const CONFIG = {
       nombre: 'Directora',
       descripcion: 'Diriges tu Grupo Personal y accedes a bonos, reconocimientos y viajes.',
       requisitos: [
-        'Venta personal en Nivel 1 de Ganamás (S/470)',
+        'Venta personal en Nivel 1 de Ganamás ({470})',
         '3 primeros pedidos en el grupo',
         '20 activas en el grupo',
         'Meta de venta del grupo completa',
@@ -451,7 +486,7 @@ export const CONFIG = {
   lideres: {
     /** Total de LID de la Líder (denominador de "Tienes n/total LID con emprendedoras"). */
     totalLid: 20,
-    /** Resumen "Mi Campaña" del Home de la Líder (como en el frame, en soles). */
+    /** Resumen "Mi Campaña" del Home de la Líder (como en el frame, en dinero). */
     campana: [
       { etiqueta: 'Sueño: Tokio', valor: 'Sí Proyectas', icono: 'sueno' },
       { etiqueta: 'Venta Familiar', valor: 80000, moneda: true, icono: 'dinero' },

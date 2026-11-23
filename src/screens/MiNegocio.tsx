@@ -1,6 +1,6 @@
 import { NotaLegal } from '../components/NotaLegal'
 import { CONFIG } from '../config/demo.config'
-import { soles } from '../domain/format'
+import { dinero } from '../domain/format'
 import { navegar, RUTAS } from '../state/router'
 import { useDemo } from '../state/store'
 import bolsa from '../assets/figma/mi-negocio/moneybag.png'
@@ -60,7 +60,7 @@ export function MiNegocio() {
           </div>
 
           <div>
-            <p className="ganancia__monto">{soles(perfil.gananciaActual ?? 0)}</p>
+            <p className="ganancia__monto">{dinero(perfil.gananciaActual ?? 0)}</p>
             <p className="ganancia__ayuda">Tu ganancia aproximada a cierre de C{actual}.</p>
           </div>
 
@@ -71,7 +71,7 @@ export function MiNegocio() {
               </span>
               <div className="destacado__texto">
                 <p className="destacado__frase">
-                  Una Directora gana desde <b className="acento">{soles(CONFIG.gananciaDirectora)}</b> por campaña*
+                  Una Directora gana desde <b className="acento">{dinero(CONFIG.gananciaDirectora)}</b> por campaña*
                 </p>
                 <p className="destacado__ayuda">Descubre cómo se logra en la carrera Yanbal.</p>
                 <fry-button
@@ -92,7 +92,7 @@ export function MiNegocio() {
               </span>
               <div className="destacado__texto">
                 <p className="destacado__frase">
-                  Llévate el bono de <b className="acento">{soles(CONFIG.bonoFormacion)}*</b>
+                  Llévate el bono de <b className="acento">{dinero(CONFIG.bonoFormacion)}*</b>
                 </p>
                 <p className="destacado__ayuda">al formar a una nueva Directora</p>
                 <fry-button
@@ -113,7 +113,7 @@ export function MiNegocio() {
                 {grupo.lineas.map((linea) => (
                   <p className="desglose__fila" key={linea.concepto}>
                     <span>{linea.concepto}</span>
-                    <span>{soles(linea.monto)}</span>
+                    <span>{dinero(linea.monto)}</span>
                   </p>
                 ))}
               </div>
@@ -138,7 +138,7 @@ export function MiNegocio() {
         <img className="venta__estrella venta__estrella--chica" src={estrellaChica} alt="" />
         <img className="venta__estrella venta__estrella--grande" src={estrellaGrande} alt="" />
         <h2>Venta Personal actual:</h2>
-        <p className="venta__monto">{soles(perfil.campana.ventaPersonal)}</p>
+        <p className="venta__monto">{dinero(perfil.campana.ventaPersonal)}</p>
       </section>
 
       <section className="tarjeta colapsada">
