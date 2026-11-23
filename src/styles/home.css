@@ -162,8 +162,7 @@
 }
 .anuncio {
   position: relative;
-  flex: none;
-  width: 300px;
+  flex: 1 0 300px;
   height: 136px;
   display: flex;
   align-items: center;
@@ -174,8 +173,8 @@
   text-align: left;
 }
 .anuncio__texto {
-  flex: none;
-  width: 163px;
+  flex: 1;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -183,9 +182,6 @@
   padding: 16px 0 16px 16px;
   font-size: 14px;
   line-height: 20px;
-}
-.anuncio--maya .anuncio__texto {
-  color: var(--c-naranja-oscuro);
 }
 .anuncio__etiqueta {
   height: 20px;
@@ -210,19 +206,6 @@
   object-fit: cover;
   object-position: 38% center;
 }
-.anuncio__tarjeta {
-  position: absolute;
-  left: 146px;
-  top: 5px;
-  width: 157px;
-  height: 157px;
-  transform: rotate(38.2deg);
-}
-.anuncio__tarjeta img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
 
 .pie {
   display: flex;
@@ -241,9 +224,9 @@
 
 /* Banner "Formaciones" (Directoras): ilustración dentro de un círculo blanco */
 .anuncio__circulo {
-  position: absolute;
-  left: 192px;
-  top: 16px;
+  position: relative;
+  flex: none;
+  margin: 0 12px;
   width: 104px;
   height: 104px;
   overflow: hidden;
