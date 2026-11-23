@@ -352,10 +352,3 @@
   }
 }
 
-/* Título con el interruptor de sonido */
-.carrera__titulo {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-}

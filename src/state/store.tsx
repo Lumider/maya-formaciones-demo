@@ -120,7 +120,7 @@ function leerPersistido(): Persistido | null {
     if (!crudo) return null
     const datos = JSON.parse(crudo) as Persistido
     if (!esSigla(datos.perfil)) return null
-    return { sonido: datos.sonido ?? true, sesion: datos.sesion ?? null, perfil: datos.perfil, porPerfil: datos.porPerfil ?? {} }
+    return { sonido: true, sesion: datos.sesion ?? null, perfil: datos.perfil, porPerfil: datos.porPerfil ?? {} }
   } catch {
     return null
   }

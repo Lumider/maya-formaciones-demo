@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { NotaLegal } from '../components/NotaLegal'
 import { CONFIG } from '../config/demo.config'
 import { dinero, dineroLocal } from '../domain/format'
-import { reproducir } from '../domain/sonido'
 import { navegar, RUTAS } from '../state/router'
 import { useDemo } from '../state/store'
 import { CaminoCarrera } from './carrera/CaminoCarrera'
@@ -15,7 +14,7 @@ import anilloMedio from '../assets/figma/mi-carrera-sin/ring-1.svg'
 import anilloCentro from '../assets/figma/mi-carrera-sin/ring-center.svg'
 
 export function MiCarrera() {
-  const { mio, abrirFlujo, sonar, sonidoActivo, activarSonido } = useDemo()
+  const { mio, abrirFlujo, sonar } = useDemo()
   const [nivelAbierto, setNivelAbierto] = useState<number | null>(null)
   const sueno = mio.sueno
 
@@ -67,19 +66,7 @@ export function MiCarrera() {
       )}
 
       <section className="carrera__seccion">
-        <div className="carrera__titulo">
-          <h1 className="t-titulo">Mi carrera</h1>
-          <fry-switch
-            checked={sonidoActivo}
-            onfryChange={(e: CustomEvent<{ checked: boolean }>) => {
-              activarSonido(e.detail.checked)
-              // Al activarlo suena de inmediato, para que se entienda qué cambia.
-              if (e.detail.checked) reproducir('avance')
-            }}
-          >
-            Sonido
-          </fry-switch>
-        </div>
+        <h1 className="t-titulo">Mi carrera</h1>
         <CaminoCarrera
           onElegir={(indice) => {
             sonar('abrir')

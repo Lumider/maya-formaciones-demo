@@ -11,7 +11,7 @@ export function ConfigScreen() {
   const [estatus, setEstatus] = useState<Sigla | null>(sesion ? sigla : null)
   const [pais, setPais] = useState<Pais>(sesion?.pais ?? CONFIG.paisPorDefecto)
   const [directora, setDirectora] = useState(sesion?.directora ?? '')
-  const [mostrarPanel, setMostrarPanel] = useState(sesion?.mostrarPanel ?? true)
+  const [mostrarPanel, setMostrarPanel] = useState(sesion?.mostrarPanel ?? false)
 
   const esEmprendedora = estatus ? CONFIG.perfiles[estatus].grupo === 'emprendedora' : false
   const listo = nombre.trim().length > 0 && estatus !== null
