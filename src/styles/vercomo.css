@@ -1,5 +1,6 @@
 /* Panel "Ver como" (herramienta de demo) */
 .vercomo-pastilla,
+.vercomo-ajustes,
 .vercomo {
   position: absolute;
   left: 12px;
@@ -95,4 +96,20 @@
   line-height: 16px;
   color: var(--c-texto-sutil);
   text-decoration: underline;
+}
+
+/* Acceso discreto al configurador cuando el panel está apagado */
+.vercomo-ajustes {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid var(--c-borde);
+  background: rgba(255, 255, 255, 0.85);
+  color: var(--c-texto-sutil);
+  opacity: 0.55;
+}
+.vercomo-ajustes:active {
+  opacity: 1;
 }
