@@ -38,8 +38,9 @@ interface Props {
 /** Modal 1 · Beneficios + pregunta de interés. */
 export function Beneficios({ onMasAdelante, onQuiero }: Props) {
   const { perfil, avisar } = useDemo()
-  // El reproductor se carga recién al tocar la portada y se desmonta al cerrar o avanzar.
-  const [reproduciendo, setReproduciendo] = useState(false)
+  // El video arranca solo al abrir el modal y se desmonta (se detiene) al cerrar o avanzar.
+  // Sin conexión queda la foto con el botón de reproducir.
+  const [reproduciendo, setReproduciendo] = useState(() => navigator.onLine)
 
   const reproducir = () => {
     if (!navigator.onLine) {

@@ -69,7 +69,7 @@
 .formaciones__lista {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 24px;
   padding: 4px 24px 24px;
 }
 .formaciones__vacio {
@@ -97,13 +97,13 @@
 }
 .potencial--medio {
   background: #fff1e1;
-  border-color: #e0a458;
-  color: #6b4a0e;
+  border-color: #ce8700;
+  color: #4b2e00;
 }
 .potencial--bajo {
-  background: #fce5e4;
-  border-color: #d9706b;
-  color: #792623;
+  background: #ffdada;
+  border-color: #ea6972;
+  color: #650c1d;
 }
 .potencial--sin {
   background: #f1efea;
@@ -127,13 +127,14 @@
   color: #407d7d;
 }
 .fila-estado--no fry-icon {
-  color: #c0392b;
+  color: #a4283a;
 }
 
 /* Franja de aviso ámbar */
 .franja-aviso {
   padding: 8px 12px;
-  border-left: 4px solid #b7791f;
+  border-left: 4px solid #9b6400;
+  color: #311d00;
   border-radius: 4px;
   background: #fff1e1;
   font-size: 14px;
