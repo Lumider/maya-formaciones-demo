@@ -11,6 +11,7 @@ import './styles/chat.css'
 import './styles/formaciones.css'
 import './styles/lider.css'
 import './styles/simulador.css'
+import './styles/programas.css'
 import App from './App.tsx'
 import { DemoProvider } from './state/store.tsx'
 

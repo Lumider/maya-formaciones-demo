@@ -15,7 +15,9 @@ import { Emprendedoras } from './screens/lider/Emprendedoras'
 import { HomeLider } from './screens/lider/HomeLider'
 import { MiCarrera } from './screens/MiCarrera'
 import { MiNegocio } from './screens/MiNegocio'
+import { ChatPrograma } from './screens/ChatPrograma'
 import { Placeholder } from './screens/Placeholder'
+import { Programas } from './screens/Programas'
 import { Simulador } from './screens/Simulador'
 import { SimuladorFormacion } from './screens/SimuladorFormacion'
 import { navegar, rutaExiste, RUTAS, useRuta } from './state/router'
@@ -52,6 +54,8 @@ export default function App() {
           <ChatDirectora />
         ) : ruta.startsWith(RUTAS.chatDirectoraHija) ? (
           <ChatDirectoraHija id={ruta.slice(RUTAS.chatDirectoraHija.length)} />
+        ) : ruta.startsWith(RUTAS.chatPrograma) ? (
+          <ChatPrograma id={ruta.slice(RUTAS.chatPrograma.length)} />
         ) : ruta.startsWith(RUTAS.chatCandidata) ? (
           <ChatCandidata id={ruta.slice(RUTAS.chatCandidata.length)} />
         ) : (
@@ -86,7 +90,7 @@ function Pantalla({ ruta }: { ruta: string }) {
     case RUTAS.misGrupos:
       return <Placeholder titulo="Mis Grupos" />
     case RUTAS.programas:
-      return <Placeholder titulo="Programas" />
+      return <Programas />
     case RUTAS.miCarrera:
       return <MiCarrera />
     case RUTAS.simulador:

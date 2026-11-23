@@ -14,6 +14,8 @@ export const RUTAS = {
   chatDirectora: '/chat/directora',
   /** Prefijo: /chat/candidata/{id} */
   chatCandidata: '/chat/candidata/',
+  /** Prefijo: /chat/programa/{id} (contactos de la sección Programas) */
+  chatPrograma: '/chat/programa/',
   emprendedoras: '/emprendedoras',
   /** Prefijo: /simulador-formacion/{id de candidata o emprendedora} */
   simuladorFormacion: '/simulador-formacion/',
@@ -22,8 +24,8 @@ export const RUTAS = {
 } as const
 
 const RUTAS_POR_GRUPO: Record<Grupo, string[]> = {
-  emprendedora: [RUTAS.inicio, RUTAS.miNegocio, RUTAS.misGrupos, RUTAS.programas, RUTAS.miCarrera, RUTAS.simulador, RUTAS.chatDirectora],
-  directora: [RUTAS.inicio, RUTAS.miNegocio, RUTAS.misGrupos, RUTAS.programas, RUTAS.formaciones, RUTAS.chatCandidata, RUTAS.simuladorFormacion],
+  emprendedora: [RUTAS.inicio, RUTAS.miNegocio, RUTAS.misGrupos, RUTAS.programas, RUTAS.miCarrera, RUTAS.simulador, RUTAS.chatDirectora, RUTAS.chatPrograma],
+  directora: [RUTAS.inicio, RUTAS.miNegocio, RUTAS.misGrupos, RUTAS.programas, RUTAS.formaciones, RUTAS.chatCandidata, RUTAS.chatPrograma, RUTAS.simuladorFormacion],
   lider: [RUTAS.inicio, RUTAS.emprendedoras, RUTAS.chatDirectoraHija, RUTAS.simuladorFormacion],
 }
 

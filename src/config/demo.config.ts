@@ -102,6 +102,27 @@ export interface DirectoraHija {
   emprendedoras: Emprendedora[]
 }
 
+/** Consultora del grupo de una Emprendedora (Programas · Elige Crecer). */
+export interface ConsultoraGrupo {
+  id: string
+  nombre: string
+  nivel: NivelId
+  /** Venta personal por campaña, la actual primero. Vacío = nueva, aún sin pedidos. */
+  ventas: number[]
+  soloPara: Sigla[]
+}
+
+/** CEM o CEM Senior del grupo de una Directora que participa en Elige Crecer. */
+export interface ParticipanteEligeCrecer {
+  id: string
+  nombre: string
+  nivel: NivelId
+  /** Campaña en la que empezó su programa. */
+  campanaInicio: number
+  /** Activas que creció en cada campaña del programa, desde la de inicio. */
+  crecimiento: number[]
+}
+
 export interface Ascenso {
   titulo: string
   desde: string
@@ -512,6 +533,43 @@ export const CONFIG = {
     { id: 'patricia-solis', nombre: 'Patricia Solís', nivel: 'cemSenior', ventaGP: 19800, activas: 12, pped: 5, intencion: 'quiere', sueno: 'Pagar estudios', soloPara: ['SNR'] },
     { id: 'carmen-vela', nombre: 'Carmen Vela', nivel: 'cemSenior', ventaGP: 18900, activas: 11, pped: 4, intencion: 'quiere', sueno: 'Tener mi negocio', soloPara: ['SNR'] },
   ] as Candidata[],
+
+  /**
+   * Programas (pestaña de la barra inferior). Solo "Elige Crecer" está construido.
+   * TODO validar con Comercial: bonos, escalones y duración del programa.
+   */
+  programas: {
+    pestanas: ['Elige Crecer', 'Incorpora y Gana', 'Ganamás'],
+    /** Venta personal que define el Nivel 1 de Ganamás (en soles). */
+    nivel1Ganamas: 470,
+    eligeCrecer: {
+      /** Campañas que dura el programa. */
+      campanas: 3,
+      /** Escalones: activas que hay que crecer y bono que se gana, por país (en su moneda). */
+      niveles: [
+        { activas: 2, bono: { PE: 100, EC: 50 } },
+        { activas: 4, bono: { PE: 200, EC: 100 } },
+        { activas: 6, bono: { PE: 300, EC: 200 } },
+      ] as { activas: number; bono: Record<Pais, number> }[],
+      /** Avance propio de la Emprendedora (CEM y CEM Senior; la Consultora aún no participa). */
+      miAvance: {
+        CEM: { campanaInicio: 10, crecimiento: [2, 2] },
+        CES: { campanaInicio: 10, crecimiento: [1, 1] },
+      } as Partial<Record<Sigla, { campanaInicio: number; crecimiento: number[] }>>,
+      /** Consultoras a las que la Emprendedora puede acompañar. */
+      consultoras: [
+        { id: 'lorena-guzman', nombre: 'Lorena Guzmán', nivel: 'consultora', ventas: [470, 470, 200], soloPara: ['CEM', 'CES'] },
+        { id: 'fernanda-montero', nombre: 'Fernanda Montero', nivel: 'consultora', ventas: [420, 470, 220], soloPara: ['CEM', 'CES'] },
+        { id: 'tania-olivares', nombre: 'Tania Olivares', nivel: 'consultora', ventas: [], soloPara: ['CES'] },
+      ] as ConsultoraGrupo[],
+      /** CEM y CEM Senior del grupo de la Directora (Junior y Senior ven la misma lista). */
+      participantes: [
+        { id: 'laura-picon', nombre: 'Laura Picón', nivel: 'cemSenior', campanaInicio: 10, crecimiento: [4, 0] },
+        { id: 'dante-aguilar', nombre: 'Dante Aguilar', nivel: 'cem', campanaInicio: 10, crecimiento: [1, 1] },
+        { id: 'julieta-farfan', nombre: 'Julieta Farfán', nivel: 'cemSenior', campanaInicio: 9, crecimiento: [2, 2, 2] },
+      ] as ParticipanteEligeCrecer[],
+    },
+  },
 
   /** Parte C · Líderes (SSE y REG ven los mismos datos en esta versión). */
   lideres: {

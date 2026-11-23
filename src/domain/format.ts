@@ -8,6 +8,10 @@ export function fijarPais(nuevo: Pais): void {
   pais = nuevo
 }
 
+export function paisActivo(): Pais {
+  return pais
+}
+
 export function datosPais(): DatosPais {
   return CONFIG.paises[pais]
 }
