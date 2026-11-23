@@ -14,7 +14,7 @@ interface Props {
 
 /** Modal 2 · Sueño y monto. */
 export function SuenoForm({ editando, onCerrar, onAtras, onGuardado }: Props) {
-  const { mio, guardarSueno } = useDemo()
+  const { mio, guardarSueno, sonar } = useDemo()
   const { opciones, otro, maxCaracteresOtro, montoObligatorio } = CONFIG.suenos
   const previo = editando ? mio.sueno : null
 
@@ -75,7 +75,10 @@ export function SuenoForm({ editando, onCerrar, onAtras, onGuardado }: Props) {
               label={o}
               value={o}
               checked={opcion === o}
-              onfryChange={() => setOpcion(o)}
+              onfryChange={() => {
+                sonar('toque')
+                setOpcion(o)
+              }}
             />
           ))}
         </div>

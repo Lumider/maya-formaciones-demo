@@ -19,13 +19,16 @@ import trofeoSueno from '../assets/figma/mi-carrera-sin/award.png'
  * nada que escribir y sin volver a pedir lo que Maya ya sabe (nivel y sueño).
  */
 export function Simulador() {
-  const { sigla, perfil, mio } = useDemo()
+  const { sigla, perfil, mio, sonar } = useDemo()
   const [eleccion, setEleccion] = useState<{ ritmo: number; inicio: number } | null>(null)
   const [nivelAbierto, setNivelAbierto] = useState<number | null>(null)
 
   const nivelActual = CONFIG.niveles[indiceNivel(perfil)]
   const sueno = mio.sueno
-  const hablarConDirectora = () => navegar(RUTAS.chatDirectora)
+  const hablarConDirectora = () => {
+    sonar('toque')
+    navegar(RUTAS.chatDirectora)
+  }
 
   if (!eleccion) {
     return (
@@ -36,8 +39,13 @@ export function Simulador() {
         preguntaInicio="¿Cuándo quieres empezar?"
         ayudaInicio={`Hoy estamos en la campaña C${CONFIG.campana.actual}. Empezar ahora cuenta.`}
         textoFinal="Ver mi plan"
+        sonar={sonar}
         onSalir={() => navegar(RUTAS.miCarrera)}
-        onListo={(ritmo, inicio) => setEleccion({ ritmo, inicio })}
+        onListo={(ritmo, inicio) => {
+          // Ver el plan armado es el logro del simulador: se celebra.
+          sonar('logro')
+          setEleccion({ ritmo, inicio })
+        }}
       />
     )
   }
@@ -84,7 +92,10 @@ export function Simulador() {
                     : `De ${etiquetaCampana(e.desde)} a ${etiquetaCampana(e.hasta)} · ${e.campanas} campañas`}
                 </p>
                 <p>Mientras tanto ganarías {soles(e.ganancia)} por campaña*</p>
-                <button className="plan__enlace" onClick={() => setNivelAbierto(e.indiceNivel)}>
+                <button className="plan__enlace" onClick={() => {
+                    sonar('abrir')
+                    setNivelAbierto(e.indiceNivel)
+                  }}>
                   Ver qué necesitas
                 </button>
               </div>

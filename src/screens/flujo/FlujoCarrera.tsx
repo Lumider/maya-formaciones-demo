@@ -9,7 +9,7 @@ import { SuenoForm } from './SuenoForm'
  * Beneficios → Sueño → Confirmación.
  */
 export function FlujoCarrera() {
-  const { flujo, perfil, abrirFlujo, cerrarFlujo } = useDemo()
+  const { flujo, perfil, abrirFlujo, cerrarFlujo, sonar } = useDemo()
   if (!flujo || perfil.grupo !== 'emprendedora') return null
 
   const irAMiCarrera = () => {
@@ -20,14 +20,22 @@ export function FlujoCarrera() {
   switch (flujo.paso) {
     case 'beneficios':
       // "Más adelante" no guarda nada: el banner de Mi carrera queda como invitación.
-      return <Beneficios onMasAdelante={irAMiCarrera} onQuiero={() => abrirFlujo('sueno')} />
+      return <Beneficios onMasAdelante={irAMiCarrera} onQuiero={() => {
+            sonar('avance')
+            abrirFlujo('sueno')
+          }} />
     case 'sueno':
       return (
         <SuenoForm
           editando={flujo.editando}
           onCerrar={irAMiCarrera}
           onAtras={() => (flujo.editando ? irAMiCarrera() : abrirFlujo('beneficios'))}
-          onGuardado={() => (flujo.editando ? irAMiCarrera() : abrirFlujo('confirmacion'))}
+          onGuardado={() => {
+            // Registrar el sueño es el logro de este flujo: se celebra.
+            sonar('logro')
+            if (flujo.editando) irAMiCarrera()
+            else abrirFlujo('confirmacion')
+          }}
         />
       )
     case 'confirmacion':

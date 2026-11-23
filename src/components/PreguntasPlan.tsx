@@ -1,6 +1,7 @@
 import { useState, type ReactNode } from 'react'
 import { CONFIG, type Sigla } from '../config/demo.config'
 import { etiquetaCampana, ritmosDe } from '../domain/simulador'
+import type { Sonido } from '../domain/sonido'
 
 interface Props {
   /** Estatus desde el que parte el plan: define los ritmos que se ofrecen. */
@@ -12,6 +13,8 @@ interface Props {
   textoFinal: string
   /** Bloque opcional sobre la primera pregunta (p. ej. el resumen de la candidata). */
   encabezado?: ReactNode
+  /** Sonidos de acompañamiento (solo los usa el simulador de carrera). */
+  sonar?: (sonido: Sonido) => void
   onSalir: () => void
   onListo: (ritmo: number, inicio: number) => void
 }
@@ -60,7 +63,11 @@ export function PreguntasPlan(props: Props) {
             role="radio"
             aria-checked={elegido === o.valor}
             className={`opcion ${elegido === o.valor ? 'opcion--elegida' : ''}`}
-            onClick={() => (paso === 1 ? setRitmo(o.valor) : setInicio(o.valor))}
+            onClick={() => {
+              props.sonar?.('toque')
+              if (paso === 1) setRitmo(o.valor)
+              else setInicio(o.valor)
+            }}
           >
             <span className="opcion__grande">{o.grande}</span>
             <span className="opcion__texto">
@@ -74,7 +81,11 @@ export function PreguntasPlan(props: Props) {
 
       <div className="simulador__pie">
         {paso === 1 ? (
-          <fry-button hierarchy="primary" full-width text="Continuar" disabled={ritmo === null} onfryClick={() => setPaso(2)} />
+          <fry-button hierarchy="primary" full-width text="Continuar" disabled={ritmo === null} onfryClick={() => {
+              props.sonar?.('avance')
+              setPaso(2)
+            }}
+          />
         ) : (
           <fry-button
             hierarchy="primary"

@@ -5,7 +5,7 @@ import { useDemo } from '../state/store'
 
 /** "Habla con tu Directora": chat simulado con la Directora madre de la Emprendedora. */
 export function ChatDirectora() {
-  const { sesion, perfil, mio, directoraMadre } = useDemo()
+  const { sesion, perfil, mio, directoraMadre, sonar } = useDemo()
   return (
     <ChatSimulado
       chatId="directora"
@@ -19,6 +19,7 @@ export function ChatDirectora() {
       })}
       etiquetaVolver="Volver a Mi carrera"
       onVolver={() => navegar(RUTAS.miCarrera)}
+      alEnviar={() => sonar('enviar')}
     />
   )
 }

@@ -3,6 +3,7 @@ import { CONFIG, esSigla, type Perfil, type Sigla } from '../config/demo.config'
 import type { Sueno } from '../domain/carrera'
 import type { FiltroFormaciones } from '../domain/formaciones'
 import type { Potencial } from '../domain/potencial'
+import { reproducir, type Sonido } from '../domain/sonido'
 
 const CLAVE = 'maya-formaciones-demo:v1'
 
@@ -33,6 +34,8 @@ export interface EstadoPerfil {
 const PERFIL_VACIO: EstadoPerfil = { sueno: null, chats: {}, popupBonoVisto: false, filtroFormaciones: 'listas', filtroEmprendedoras: null }
 
 interface Persistido {
+  /** Sonidos de Mi carrera activados (se puede silenciar desde la pantalla). */
+  sonido: boolean
   sesion: Sesion | null
   perfil: Sigla
   porPerfil: Partial<Record<Sigla, EstadoPerfil>>
@@ -62,6 +65,7 @@ type Accion =
   | { tipo: 'filtroFormaciones'; filtro: FiltroFormaciones }
   | { tipo: 'filtroEmprendedoras'; filtro: Potencial | null }
   | { tipo: 'borrador'; borrador: Estado['borrador'] }
+  | { tipo: 'sonido'; activo: boolean }
   | { tipo: 'hoja'; delta: 1 | -1 }
   | { tipo: 'aviso'; texto: string | null }
 
@@ -98,6 +102,8 @@ function reductor(estado: Estado, accion: Accion): Estado {
       return editarPerfil(estado, (p) => ({ ...p, filtroEmprendedoras: accion.filtro }))
     case 'borrador':
       return { ...estado, borrador: accion.borrador }
+    case 'sonido':
+      return { ...estado, sonido: accion.activo }
     case 'hoja':
       return { ...estado, hojasAbiertas: Math.max(0, estado.hojasAbiertas + accion.delta) }
     case 'aviso':
@@ -111,7 +117,7 @@ function leerPersistido(): Persistido | null {
     if (!crudo) return null
     const datos = JSON.parse(crudo) as Persistido
     if (!esSigla(datos.perfil)) return null
-    return { sesion: datos.sesion ?? null, perfil: datos.perfil, porPerfil: datos.porPerfil ?? {} }
+    return { sonido: datos.sonido ?? true, sesion: datos.sesion ?? null, perfil: datos.perfil, porPerfil: datos.porPerfil ?? {} }
   } catch {
     return null
   }
@@ -122,6 +128,7 @@ function estadoInicial(usarGuardado = true): Estado {
   // El perfil también se puede fijar por URL: ?como=CEM
   const como = new URLSearchParams(window.location.search).get('como')?.toUpperCase()
   return {
+    sonido: guardado?.sonido ?? true,
     sesion: guardado?.sesion ?? null,
     perfil: esSigla(como) ? como : (guardado?.perfil ?? 'CEM'),
     porPerfil: guardado?.porPerfil ?? {},
@@ -158,6 +165,11 @@ interface Demo {
   elegirFiltroFormaciones(filtro: FiltroFormaciones): void
   elegirFiltroEmprendedoras(filtro: Potencial | null): void
   dejarBorrador(borrador: Estado['borrador']): void
+  /** Sonidos de Mi carrera. */
+  sonidoActivo: boolean
+  activarSonido(activo: boolean): void
+  /** Reproduce un sonido si no están silenciados. */
+  sonar(sonido: Sonido): void
   registrarHoja(delta: 1 | -1): void
   avisar(texto: string | null): void
 }
@@ -168,13 +180,13 @@ export function DemoProvider({ children }: { children: ReactNode }) {
   const [estado, despachar] = useReducer(reductor, undefined, () => estadoInicial())
 
   useEffect(() => {
-    const { sesion, perfil, porPerfil } = estado
+    const { sonido, sesion, perfil, porPerfil } = estado
     try {
-      localStorage.setItem(CLAVE, JSON.stringify({ sesion, perfil, porPerfil } satisfies Persistido))
+      localStorage.setItem(CLAVE, JSON.stringify({ sonido, sesion, perfil, porPerfil } satisfies Persistido))
     } catch {
       // sin localStorage la demo sigue funcionando en memoria
     }
-  }, [estado.sesion, estado.perfil, estado.porPerfil]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [estado.sonido, estado.sesion, estado.perfil, estado.porPerfil]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const iniciar = useCallback((sesion: Sesion, perfil: Sigla) => despachar({ tipo: 'iniciar', sesion, perfil }), [])
   const reiniciar = useCallback(() => despachar({ tipo: 'reiniciar' }), [])
@@ -200,6 +212,9 @@ export function DemoProvider({ children }: { children: ReactNode }) {
     [],
   )
   const dejarBorrador = useCallback((borrador: Estado['borrador']) => despachar({ tipo: 'borrador', borrador }), [])
+  const activarSonido = useCallback((activo: boolean) => despachar({ tipo: 'sonido', activo }), [])
+  const sonidoActivo = estado.sonido
+  const sonar = useCallback((sonido: Sonido) => sonidoActivo && reproducir(sonido), [sonidoActivo])
   const registrarHoja = useCallback((delta: 1 | -1) => despachar({ tipo: 'hoja', delta }), [])
   const avisar = useCallback((texto: string | null) => despachar({ tipo: 'aviso', texto }), [])
 
@@ -227,10 +242,13 @@ export function DemoProvider({ children }: { children: ReactNode }) {
       elegirFiltroFormaciones,
       elegirFiltroEmprendedoras,
       dejarBorrador,
+      sonidoActivo,
+      activarSonido,
+      sonar,
       registrarHoja,
       avisar,
     }),
-    [estado, iniciar, reiniciar, cambiarPerfil, abrirFlujo, cerrarFlujo, guardarSueno, enviarMensaje, abrirPopupBono, cerrarPopupBono, elegirFiltroFormaciones, elegirFiltroEmprendedoras, dejarBorrador, registrarHoja, avisar],
+    [estado, iniciar, reiniciar, cambiarPerfil, abrirFlujo, cerrarFlujo, guardarSueno, enviarMensaje, abrirPopupBono, cerrarPopupBono, elegirFiltroFormaciones, elegirFiltroEmprendedoras, dejarBorrador, sonidoActivo, activarSonido, sonar, registrarHoja, avisar],
   )
 
   return <Contexto.Provider value={valor}>{children}</Contexto.Provider>

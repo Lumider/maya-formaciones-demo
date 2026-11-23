@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { NotaLegal } from '../components/NotaLegal'
 import { CONFIG } from '../config/demo.config'
 import { soles } from '../domain/format'
+import { reproducir } from '../domain/sonido'
 import { navegar, RUTAS } from '../state/router'
 import { useDemo } from '../state/store'
 import { CaminoCarrera } from './carrera/CaminoCarrera'
@@ -14,11 +15,12 @@ import anilloMedio from '../assets/figma/mi-carrera-sin/ring-1.svg'
 import anilloCentro from '../assets/figma/mi-carrera-sin/ring-center.svg'
 
 export function MiCarrera() {
-  const { mio, abrirFlujo } = useDemo()
+  const { mio, abrirFlujo, sonar, sonidoActivo, activarSonido } = useDemo()
   const [nivelAbierto, setNivelAbierto] = useState<number | null>(null)
   const sueno = mio.sueno
 
   const hablarConDirectora = () => {
+    sonar('toque')
     setNivelAbierto(null)
     navegar(RUTAS.chatDirectora)
   }
@@ -33,7 +35,10 @@ export function MiCarrera() {
             <b>{sueno.texto}</b>
             {sueno.monto !== null && <span>Meta: {soles(sueno.monto)}</span>}
           </div>
-          <button className="sueno-card__editar" onClick={() => abrirFlujo('sueno', true)} aria-label="Editar tu sueño">
+          <button className="sueno-card__editar" onClick={() => {
+              sonar('toque')
+              abrirFlujo('sueno', true)
+            }} aria-label="Editar tu sueño">
             <fry-icon name="edit-01-outline" color="#c94e22" />
           </button>
         </section>
@@ -52,15 +57,35 @@ export function MiCarrera() {
               size="medium"
               text="Me interesa"
               icon-right="arrow-right-outline"
-              onfryClick={() => abrirFlujo('beneficios')}
+              onfryClick={() => {
+                sonar('abrir')
+                abrirFlujo('beneficios')
+              }}
             />
           </div>
         </section>
       )}
 
       <section className="carrera__seccion">
-        <h1 className="t-titulo">Mi carrera</h1>
-        <CaminoCarrera onElegir={setNivelAbierto} />
+        <div className="carrera__titulo">
+          <h1 className="t-titulo">Mi carrera</h1>
+          <fry-switch
+            checked={sonidoActivo}
+            onfryChange={(e: CustomEvent<{ checked: boolean }>) => {
+              activarSonido(e.detail.checked)
+              // Al activarlo suena de inmediato, para que se entienda qué cambia.
+              if (e.detail.checked) reproducir('avance')
+            }}
+          >
+            Sonido
+          </fry-switch>
+        </div>
+        <CaminoCarrera
+          onElegir={(indice) => {
+            sonar('abrir')
+            setNivelAbierto(indice)
+          }}
+        />
       </section>
 
       <section className="carrera__seccion">
@@ -72,7 +97,10 @@ export function MiCarrera() {
           </span>
           <img src={anillosWhatsapp} alt="" width={115} height={115} />
         </button>
-        <button className="paso-card" onClick={() => navegar(RUTAS.simulador)}>
+        <button className="paso-card" onClick={() => {
+            sonar('toque')
+            navegar(RUTAS.simulador)
+          }}>
           <span className="paso-card__texto">
             <b>
               Simula tu carrera <fry-icon name="arrow-right-outline" size="20" />
@@ -92,7 +120,10 @@ export function MiCarrera() {
       {nivelAbierto !== null && (
         <HojaNivel
           indice={nivelAbierto}
-          onCambiar={setNivelAbierto}
+          onCambiar={(indice) => {
+            sonar('avance')
+            setNivelAbierto(indice)
+          }}
           onCerrar={() => setNivelAbierto(null)}
           onHablar={hablarConDirectora}
         />

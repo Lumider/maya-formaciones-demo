@@ -20,13 +20,15 @@ interface Props {
   mensaje: string
   etiquetaVolver: string
   onVolver: () => void
+  /** Se llama al enviar el mensaje (p. ej. para acompañarlo con un sonido). */
+  alEnviar?: () => void
 }
 
 /**
  * Pantalla que simula un chat de WhatsApp dentro de la demo.
  * Nunca abre WhatsApp real ni envía mensajes de verdad.
  */
-export function ChatSimulado({ chatId, contacto, subtitulo, mensaje, etiquetaVolver, onVolver }: Props) {
+export function ChatSimulado({ chatId, contacto, subtitulo, mensaje, etiquetaVolver, onVolver, alEnviar }: Props) {
   const { mio, enviarMensaje } = useDemo()
   const enviados = mio.chats[chatId] ?? []
   const ultimo = enviados[enviados.length - 1]
@@ -44,6 +46,7 @@ export function ChatSimulado({ chatId, contacto, subtitulo, mensaje, etiquetaVol
     enviarMensaje(chatId, { texto: borrador, hora: horaChat(new Date()) })
     setBorrador('')
     setRecienEnviado(true)
+    alEnviar?.()
   }
 
   return (
