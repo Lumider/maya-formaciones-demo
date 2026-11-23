@@ -76,15 +76,22 @@ export function Home() {
         <h2 className="campana__titulo">Mi Campaña</h2>
         <ul className="campana__tarjetas">
           {indicadores.map((i) => (
-            <li className="indicador" key={i.etiqueta}>
-              <span className="indicador__cabecera">
-                <span className={`indicador__icono ${i.clase ?? ''}`}>
-                  <img src={i.icono} alt="" />
+            <li key={i.etiqueta}>
+              {/* "Ganancia estimada" lleva a Mi negocio, como en el Figma; las demás no tienen acción en la demo */}
+              <button
+                className="indicador"
+                onClick={i.destacado ? () => navegar(RUTAS.miNegocio) : undefined}
+                aria-label={i.destacado ? `${i.etiqueta}: ${i.valor}. Ver Mi negocio` : undefined}
+              >
+                <span className="indicador__cabecera">
+                  <span className={`indicador__icono ${i.clase ?? ''}`}>
+                    <img src={i.icono} alt="" />
+                  </span>
+                  <img className="indicador__chevron" src={chevron} alt="" />
                 </span>
-                <img className="indicador__chevron" src={chevron} alt="" />
-              </span>
-              <span className="indicador__etiqueta">{i.etiqueta}</span>
-              <b className={`indicador__valor ${i.destacado ? 'indicador__valor--destacado' : ''}`}>{i.valor}</b>
+                <span className="indicador__etiqueta">{i.etiqueta}</span>
+                <b className={`indicador__valor ${i.destacado ? 'indicador__valor--destacado' : ''}`}>{i.valor}</b>
+              </button>
             </li>
           ))}
         </ul>
