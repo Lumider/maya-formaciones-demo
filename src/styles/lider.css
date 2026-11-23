@@ -103,8 +103,9 @@
 }
 .emprendedoras__titulo img {
   flex: none;
-  width: 56px;
-  height: 56px;
+  width: 80px;
+  height: 80px;
+  margin: -8px -8px -8px 0;
   object-fit: contain;
 }
 .emprendedoras__buscar {
@@ -141,9 +142,9 @@
 }
 .etiqueta-estado--chica {
   padding: 3px 8px;
-  border: 1px solid #57a8a7;
-  background: #e6f7f6;
-  color: #1b6a69;
+  border: 1px solid #2eb0b4;
+  background: #e8f8f9;
+  color: #1f8084;
   font-size: 12px;
   line-height: 16px;
 }
