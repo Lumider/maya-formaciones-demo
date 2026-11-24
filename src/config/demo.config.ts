@@ -470,18 +470,29 @@ export const CONFIG = {
     },
     SSE: {
       sigla: 'SSE',
-      grupo: 'lider',
-      descripcion: 'Directora Super Senior — lidera a sus Directoras hijas',
-      gananciaActual: null,
-      campana: { ventaGP: 80000, activasGrupo: 96, deudaActual: 120, creditoYanbal: 807, ventaPersonal: 800 },
-      desglose: [],
+      grupo: 'directora',
+      // En esta demo la Super Senior sigue el mismo flujo que Junior y Senior (Formaciones y sus candidatas).
+      descripcion: 'Directora Super Senior — ya formó a 3 Directoras',
+      gananciaActual: 4330,
+      campana: { ventaGP: 31000, activasGrupo: 36, deudaActual: 120, creditoYanbal: 807, ventaPersonal: 800 },
+      desglose: [
+        { titulo: 'Venta Grupo Personal', lineas: [{ concepto: 'Honorarios 8%', monto: 2480 }] },
+        { titulo: 'Ganancia por hijas Directoras', lineas: [{ concepto: 'Comisión 5.5% por 3 hijas Directoras', monto: 1650 }] },
+        { titulo: 'Venta Personal', lineas: [{ concepto: 'Escala 25% dto.', monto: 60 }] },
+        {
+          titulo: 'Mis Premios',
+          lineas: [
+            { concepto: 'Microondas Oster', monto: 100 },
+            { concepto: 'Wafflera Oster', monto: 40 },
+          ],
+        },
+      ],
     },
     REG: {
       sigla: 'REG',
       grupo: 'lider',
       descripcion: 'Directora Regional — lidera una región de Directoras',
       gananciaActual: null,
-      // En esta versión SSE y REG ven la misma vista con los mismos datos.
       campana: { ventaGP: 80000, activasGrupo: 96, deudaActual: 120, creditoYanbal: 807, ventaPersonal: 800 },
       desglose: [],
     },
@@ -527,7 +538,7 @@ export const CONFIG = {
     },
   } satisfies Record<keyof Metricas, { aviso: string; mensaje: string }>,
 
-  /** Candidatas del Grupo Personal de las Directoras Junior y Senior. */
+  /** Candidatas del Grupo Personal de las Directoras Junior, Senior y Super Senior. */
   candidatas: [
     { id: 'luciana-grande', nombre: 'Luciana Grande', nivel: 'cemSenior', ventaGP: 21200, activas: 10, pped: 7, intencion: 'quiere', sueno: 'Comprar mi casa' },
     { id: 'maria-ramos', nombre: 'María Ramos', nivel: 'cemSenior', ventaGP: 15200, activas: 10, pped: 2, intencion: 'quiere', sueno: 'Pagar estudios' },
@@ -535,8 +546,8 @@ export const CONFIG = {
     { id: 'carolina-rios', nombre: 'Carolina Ríos', nivel: 'consultora', ventaGP: 5200, activas: 0, pped: 3, intencion: 'quiere', sueno: 'Viajar en familia' },
     { id: 'elena-paz', nombre: 'Elena Paz', nivel: 'cemSenior', ventaGP: 18500, activas: 22, pped: 3, intencion: 'noRegistro' },
     { id: 'rosa-medina', nombre: 'Rosa Medina', nivel: 'cemSenior', ventaGP: 17500, activas: 20, pped: 3, intencion: 'noRegistro' },
-    { id: 'patricia-solis', nombre: 'Patricia Solís', nivel: 'cemSenior', ventaGP: 19800, activas: 12, pped: 5, intencion: 'quiere', sueno: 'Pagar estudios', soloPara: ['SNR'] },
-    { id: 'carmen-vela', nombre: 'Carmen Vela', nivel: 'cemSenior', ventaGP: 18900, activas: 11, pped: 4, intencion: 'quiere', sueno: 'Tener mi negocio', soloPara: ['SNR'] },
+    { id: 'patricia-solis', nombre: 'Patricia Solís', nivel: 'cemSenior', ventaGP: 19800, activas: 12, pped: 5, intencion: 'quiere', sueno: 'Pagar estudios', soloPara: ['SNR', 'SSE'] },
+    { id: 'carmen-vela', nombre: 'Carmen Vela', nivel: 'cemSenior', ventaGP: 18900, activas: 11, pped: 4, intencion: 'quiere', sueno: 'Tener mi negocio', soloPara: ['SNR', 'SSE'] },
   ] as Candidata[],
 
   /**
@@ -576,7 +587,7 @@ export const CONFIG = {
     },
   },
 
-  /** Parte C · Líderes (SSE y REG ven los mismos datos en esta versión). */
+  /** Parte C · Líderes (en esta demo, solo la Regional). */
   lideres: {
     /** Total de LID de la Líder (denominador de "Tienes n/total LID con emprendedoras"). */
     totalLid: 20,

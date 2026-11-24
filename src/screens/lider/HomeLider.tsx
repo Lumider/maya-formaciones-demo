@@ -31,7 +31,7 @@ const ACCESOS = [
 
 const PESTANAS = ['Mis Directoras', 'Grupo Personal'] as const
 
-/** Home de la Líder (SSE y REG): sin barra inferior; entra a Emprendedoras desde "Con Aspirante". */
+/** Home de la Líder (REG): sin barra inferior; entra a Emprendedoras desde "Con Aspirante". */
 export function HomeLider() {
   const { sesion, avisar, elegirFiltroEmprendedoras } = useDemo()
   const [pestana, setPestana] = useState<(typeof PESTANAS)[number]>('Mis Directoras')
