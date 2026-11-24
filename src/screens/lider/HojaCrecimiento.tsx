@@ -1,6 +1,8 @@
+import { EtiquetaPotencial } from '../../components/EtiquetaPotencial'
 import { HojaInferior } from '../../components/HojaInferior'
 import { siglaNivel, type EmprendedoraEvaluada } from '../../domain/lideres'
 import { dinero } from '../../domain/format'
+import { TEXTO_INTENCION } from '../../domain/potencial'
 
 interface Props {
   emprendedora: EmprendedoraEvaluada
@@ -10,7 +12,7 @@ interface Props {
   onCerrar: () => void
 }
 
-/** Hoja "Ver crecimiento": historial por campaña. La primera columna de datos es la campaña actual. */
+/** Hoja "Ver crecimiento": potencial, intención e historial por campaña. La primera columna de datos es la campaña actual. */
 export function HojaCrecimiento({ emprendedora, directora, ventaGPDirectora, onCerrar }: Props) {
   const campanas = emprendedora.historial
   const filas: { titulo: string; celdas: (string | { etiqueta: string })[] }[] = [
@@ -26,10 +28,14 @@ export function HojaCrecimiento({ emprendedora, directora, ventaGPDirectora, onC
   return (
     <HojaInferior etiqueta={`Crecimiento de ${emprendedora.nombre}`} conCerrar onCerrar={onCerrar} className="hoja--crecimiento">
       <div className="crecimiento">
+        <div className="crecimiento__potencial">
+          <EtiquetaPotencial potencial={emprendedora.potencial} />
+        </div>
         <h2 className="flujo__titulo">{emprendedora.nombre}</h2>
         <p className="crecimiento__detalle">
           Califica como {emprendedora.sigla} · Directora: {directora}
         </p>
+        <p className="crecimiento__detalle">{TEXTO_INTENCION[emprendedora.intencion]}</p>
         <div className="crecimiento__tabla">
           <table>
             <thead>
