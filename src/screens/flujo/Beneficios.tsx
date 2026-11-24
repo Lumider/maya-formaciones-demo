@@ -19,7 +19,7 @@ const BENEFICIOS = [
   {
     icono: moneda,
     clase: '',
-    titulo: 'Bono de Cuadrante A',
+    titulo: 'Bonos por tus resultados',
     detalle: 'Al traer nuevos primeros pedidos y mantener una buena venta de tu grupo.',
   },
   {
