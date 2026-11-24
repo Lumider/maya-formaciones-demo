@@ -122,7 +122,7 @@ export function MiNegocio() {
         </div>
         <div className="ganancia__pie">
           <button className="enlace" onClick={fueraDeAlcance}>
-            {perfil.grupo === 'directora' ? 'Beneficios de Directora' : 'Reporte de Honorarios'}
+            Reporte de Honorarios
             <fry-icon name="external-link-outline" size="20" />
           </button>
         </div>

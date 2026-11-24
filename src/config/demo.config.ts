@@ -438,7 +438,7 @@ export const CONFIG = {
       gananciaActual: 2390,
       campana: { ventaGP: 18900, activasGrupo: 24, deudaActual: 120, creditoYanbal: 807, ventaPersonal: 800 },
       desglose: [
-        { titulo: 'Mi Venta Personal', lineas: [{ concepto: 'Honorarios 8%', monto: 2200 }] },
+        { titulo: 'Venta Grupo Personal', lineas: [{ concepto: 'Honorarios 8%', monto: 2200 }] },
         { titulo: 'Venta Personal', lineas: [{ concepto: 'Escala 25% dto.', monto: 50 }] },
         {
           titulo: 'Mis Premios',
@@ -456,7 +456,7 @@ export const CONFIG = {
       gananciaActual: 3400,
       campana: { ventaGP: 24500, activasGrupo: 31, deudaActual: 120, creditoYanbal: 807, ventaPersonal: 800 },
       desglose: [
-        { titulo: 'Mi Venta Personal', lineas: [{ concepto: 'Honorarios 8%', monto: 2700 }] },
+        { titulo: 'Venta Grupo Personal', lineas: [{ concepto: 'Honorarios 8%', monto: 2700 }] },
         { titulo: 'Ganancia por hijas Directoras', lineas: [{ concepto: 'Comisión 5% por 1 hija Directora', monto: 500 }] },
         { titulo: 'Venta Personal', lineas: [{ concepto: 'Escala 25% dto.', monto: 60 }] },
         {
