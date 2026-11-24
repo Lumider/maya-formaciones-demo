@@ -182,41 +182,31 @@
   height: 30px;
 }
 
-/* El siguiente nivel late para invitar a tocarlo: dos ondas naranjas y un leve rebote */
+/* El siguiente nivel pulsa para invitar a tocarlo: mismo halo que el Q en curso de la tarjeta "Crecimiento DIR" */
+.nodo--siguiente {
+  isolation: isolate;
+}
 .nodo--siguiente .nodo__circulo {
   position: relative;
   border-color: #dc582a;
-  animation: nodo-latido 2.4s ease-in-out infinite;
 }
-.nodo--siguiente .nodo__circulo::before,
-.nodo--siguiente .nodo__circulo::after {
+.nodo--siguiente .nodo__circulo::before {
   content: '';
   position: absolute;
-  inset: -2px;
+  inset: -6px;
+  z-index: -1;
   border-radius: 50%;
-  border: 2px solid #dc582a;
-  opacity: 0;
+  background: #dc582a;
   pointer-events: none;
-  animation: nodo-onda 2.4s ease-out infinite;
-}
-.nodo--siguiente .nodo__circulo::after {
-  animation-delay: 0.6s;
+  animation: nodo-pulso 1.6s ease-out infinite;
 }
 .nodo--siguiente .nodo__etiqueta {
   border-color: #dc582a;
   color: #c94e22;
 }
-.nodo--siguiente:active .nodo__circulo {
-  animation: none;
-  transform: scale(0.94);
-}
-@keyframes nodo-onda {
-  0% { transform: scale(1); opacity: 0.55; }
-  70%, 100% { transform: scale(1.75); opacity: 0; }
-}
-@keyframes nodo-latido {
-  0%, 30%, 100% { transform: scale(1); }
-  12% { transform: scale(1.08); }
+@keyframes nodo-pulso {
+  0% { opacity: 0.5; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.8); }
 }
 
 /* Cards "Da el siguiente paso" */
