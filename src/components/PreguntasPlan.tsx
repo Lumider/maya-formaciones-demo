@@ -7,7 +7,6 @@ interface Props {
   /** Estatus desde el que parte el plan: define los ritmos que se ofrecen. */
   sigla: Sigla
   preguntaRitmo: string
-  etiquetasRitmo: string[]
   preguntaInicio: string
   ayudaInicio: string
   textoFinal: string
@@ -31,7 +30,7 @@ export function PreguntasPlan(props: Props) {
   const { actual } = CONFIG.campana
   const opciones =
     paso === 1
-      ? ritmosDe(props.sigla).map((r, i) => ({ valor: r, grande: String(r), titulo: 'campañas', detalle: props.etiquetasRitmo[i] }))
+      ? ritmosDe(props.sigla).map((r) => ({ valor: r, grande: String(r), titulo: 'campañas', detalle: '' }))
       : CONFIG.simulador.inicios.map((titulo, i) => {
           const [campana, anio] = etiquetaCampana(actual + i).split(' ')
           return { valor: actual + i, grande: campana, titulo, detalle: anio }

@@ -1,3 +1,10 @@
+import { campanaDe, numeroCampana } from './calendario'
+
+// La campaña y la semana salen de la fecha de hoy según el calendario oficial.
+const HOY = campanaDe(new Date())
+/** Campaña a n campañas de la actual (-1 = la anterior), ya en 1–13. */
+const c = (n: number) => numeroCampana(HOY.campana + n)
+
 /**
  * ÚNICA FUENTE DE DATOS DE LA DEMO.
  * Perfiles, ganancias, requisitos, textos legales y URLs viven aquí.
@@ -199,9 +206,9 @@ export const CONFIG = {
   } satisfies Record<Pais, DatosPais> as Record<Pais, DatosPais>,
 
   campana: {
-    actual: 11,
-    etiqueta: 'Campaña 11',
-    corte: 'C11 - S3',
+    actual: HOY.campana,
+    etiqueta: `Campaña ${HOY.campana}`,
+    corte: `C${HOY.campana} - S${HOY.semana}`,
     actualizado: 'Actualizado 09:30 a.m.',
   },
 
@@ -234,12 +241,10 @@ export const CONFIG = {
    * ritmos y reparto de campañas por etapa (tomados del simulador anterior).
    */
   simulador: {
-    anioActual: 2026,
+    anioActual: HOY.anio,
     campanasPorAnio: 13,
     /** Campañas de inicio que se ofrecen, contadas desde la campaña actual. */
     inicios: ['Esta campaña', 'La próxima', 'En dos campañas'],
-    etiquetasRitmo: ['Ritmo intenso', 'Ritmo parejo', 'A tu ritmo'],
-    etiquetasRitmoFormacion: ['Ritmo intenso', 'Ritmo parejo', 'A su ritmo'],
     /**
      * Simulador de formación: qué hace la candidata y qué le toca a su Directora en cada etapa
      * (dicho a la Directora y, para la vista de la Líder, en tercera persona).
@@ -553,8 +558,8 @@ export const CONFIG = {
       ] as { activas: number; bono: Record<Pais, number> }[],
       /** Avance propio de la Emprendedora (CEM y CEM Senior; la Consultora aún no participa). */
       miAvance: {
-        CEM: { campanaInicio: 10, crecimiento: [2, 2] },
-        CES: { campanaInicio: 10, crecimiento: [1, 1] },
+        CEM: { campanaInicio: HOY.campana - 1, crecimiento: [2, 2] },
+        CES: { campanaInicio: HOY.campana - 1, crecimiento: [1, 1] },
       } as Partial<Record<Sigla, { campanaInicio: number; crecimiento: number[] }>>,
       /** Consultoras a las que la Emprendedora puede acompañar. */
       consultoras: [
@@ -564,9 +569,9 @@ export const CONFIG = {
       ] as ConsultoraGrupo[],
       /** CEM y CEM Senior del grupo de la Directora (Junior y Senior ven la misma lista). */
       participantes: [
-        { id: 'laura-picon', nombre: 'Laura Picón', nivel: 'cemSenior', campanaInicio: 10, crecimiento: [4, 0] },
-        { id: 'dante-aguilar', nombre: 'Dante Aguilar', nivel: 'cem', campanaInicio: 10, crecimiento: [1, 1] },
-        { id: 'julieta-farfan', nombre: 'Julieta Farfán', nivel: 'cemSenior', campanaInicio: 9, crecimiento: [2, 2, 2] },
+        { id: 'laura-picon', nombre: 'Laura Picón', nivel: 'cemSenior', campanaInicio: HOY.campana - 1, crecimiento: [4, 0] },
+        { id: 'dante-aguilar', nombre: 'Dante Aguilar', nivel: 'cem', campanaInicio: HOY.campana - 1, crecimiento: [1, 1] },
+        { id: 'julieta-farfan', nombre: 'Julieta Farfán', nivel: 'cemSenior', campanaInicio: HOY.campana - 2, crecimiento: [2, 2, 2] },
       ] as ParticipanteEligeCrecer[],
     },
   },
@@ -611,10 +616,10 @@ export const CONFIG = {
             nombre: 'Ena Molocho',
             intencion: 'quiere',
             historial: [
-              { campana: 11, ventaGP: 21200, califica: 'cemSenior', im: 2.3, activas: 12, ppedDirectos: 2, pped: 4 },
-              { campana: 10, ventaGP: 19400, califica: 'cemSenior', im: 2.9, activas: 11, ppedDirectos: 2, pped: 3 },
-              { campana: 9, ventaGP: 17800, califica: 'cem', im: 3.4, activas: 10, ppedDirectos: 1, pped: 2 },
-              { campana: 8, ventaGP: 16900, califica: 'cem', im: 3.1, activas: 9, ppedDirectos: 1, pped: 2 },
+              { campana: c(0), ventaGP: 21200, califica: 'cemSenior', im: 2.3, activas: 12, ppedDirectos: 2, pped: 4 },
+              { campana: c(-1), ventaGP: 19400, califica: 'cemSenior', im: 2.9, activas: 11, ppedDirectos: 2, pped: 3 },
+              { campana: c(-2), ventaGP: 17800, califica: 'cem', im: 3.4, activas: 10, ppedDirectos: 1, pped: 2 },
+              { campana: c(-3), ventaGP: 16900, califica: 'cem', im: 3.1, activas: 9, ppedDirectos: 1, pped: 2 },
             ],
           },
           {
@@ -622,10 +627,10 @@ export const CONFIG = {
             nombre: 'Pamela Ramos',
             intencion: 'quiere',
             historial: [
-              { campana: 11, ventaGP: 18600, califica: 'cemSenior', im: 2.6, activas: 11, ppedDirectos: 2, pped: 3 },
-              { campana: 10, ventaGP: 17100, califica: 'cemSenior', im: 2.8, activas: 10, ppedDirectos: 1, pped: 3 },
-              { campana: 9, ventaGP: 15900, califica: 'cem', im: 3.1, activas: 9, ppedDirectos: 1, pped: 2 },
-              { campana: 8, ventaGP: 15200, califica: 'cem', im: 3.0, activas: 9, ppedDirectos: 1, pped: 2 },
+              { campana: c(0), ventaGP: 18600, califica: 'cemSenior', im: 2.6, activas: 11, ppedDirectos: 2, pped: 3 },
+              { campana: c(-1), ventaGP: 17100, califica: 'cemSenior', im: 2.8, activas: 10, ppedDirectos: 1, pped: 3 },
+              { campana: c(-2), ventaGP: 15900, califica: 'cem', im: 3.1, activas: 9, ppedDirectos: 1, pped: 2 },
+              { campana: c(-3), ventaGP: 15200, califica: 'cem', im: 3.0, activas: 9, ppedDirectos: 1, pped: 2 },
             ],
           },
           {
@@ -633,10 +638,10 @@ export const CONFIG = {
             nombre: 'Rocío Huertas',
             intencion: 'aunNoDecide',
             historial: [
-              { campana: 11, ventaGP: 16400, califica: 'cemSenior', im: 2.8, activas: 10, ppedDirectos: 1, pped: 3 },
-              { campana: 10, ventaGP: 15600, califica: 'cemSenior', im: 3.0, activas: 10, ppedDirectos: 1, pped: 2 },
-              { campana: 9, ventaGP: 14800, califica: 'cem', im: 3.2, activas: 9, ppedDirectos: 1, pped: 2 },
-              { campana: 8, ventaGP: 14100, califica: 'cem', im: 3.5, activas: 8, ppedDirectos: 0, pped: 1 },
+              { campana: c(0), ventaGP: 16400, califica: 'cemSenior', im: 2.8, activas: 10, ppedDirectos: 1, pped: 3 },
+              { campana: c(-1), ventaGP: 15600, califica: 'cemSenior', im: 3.0, activas: 10, ppedDirectos: 1, pped: 2 },
+              { campana: c(-2), ventaGP: 14800, califica: 'cem', im: 3.2, activas: 9, ppedDirectos: 1, pped: 2 },
+              { campana: c(-3), ventaGP: 14100, califica: 'cem', im: 3.5, activas: 8, ppedDirectos: 0, pped: 1 },
             ],
           },
           {
@@ -644,10 +649,10 @@ export const CONFIG = {
             nombre: 'María Mercedes',
             intencion: 'noRegistro',
             historial: [
-              { campana: 11, ventaGP: 920, califica: 'consultora', im: 4.1, activas: 3, ppedDirectos: 0, pped: 0 },
-              { campana: 10, ventaGP: 1100, califica: 'consultora', im: 3.8, activas: 3, ppedDirectos: 0, pped: 0 },
-              { campana: 9, ventaGP: 870, califica: 'consultora', im: 4.4, activas: 2, ppedDirectos: 0, pped: 0 },
-              { campana: 8, ventaGP: 990, califica: 'consultora', im: 4.0, activas: 3, ppedDirectos: 0, pped: 1 },
+              { campana: c(0), ventaGP: 920, califica: 'consultora', im: 4.1, activas: 3, ppedDirectos: 0, pped: 0 },
+              { campana: c(-1), ventaGP: 1100, califica: 'consultora', im: 3.8, activas: 3, ppedDirectos: 0, pped: 0 },
+              { campana: c(-2), ventaGP: 870, califica: 'consultora', im: 4.4, activas: 2, ppedDirectos: 0, pped: 0 },
+              { campana: c(-3), ventaGP: 990, califica: 'consultora', im: 4.0, activas: 3, ppedDirectos: 0, pped: 1 },
             ],
           },
         ],
@@ -666,10 +671,10 @@ export const CONFIG = {
             nombre: 'Karla Ruiz',
             intencion: 'quiere',
             historial: [
-              { campana: 11, ventaGP: 9800, califica: 'cemSenior', im: 3.0, activas: 8, ppedDirectos: 1, pped: 2 },
-              { campana: 10, ventaGP: 9100, califica: 'cemSenior', im: 3.3, activas: 7, ppedDirectos: 1, pped: 2 },
-              { campana: 9, ventaGP: 8300, califica: 'cem', im: 3.6, activas: 7, ppedDirectos: 1, pped: 1 },
-              { campana: 8, ventaGP: 7900, califica: 'cem', im: 3.4, activas: 6, ppedDirectos: 0, pped: 1 },
+              { campana: c(0), ventaGP: 9800, califica: 'cemSenior', im: 3.0, activas: 8, ppedDirectos: 1, pped: 2 },
+              { campana: c(-1), ventaGP: 9100, califica: 'cemSenior', im: 3.3, activas: 7, ppedDirectos: 1, pped: 2 },
+              { campana: c(-2), ventaGP: 8300, califica: 'cem', im: 3.6, activas: 7, ppedDirectos: 1, pped: 1 },
+              { campana: c(-3), ventaGP: 7900, califica: 'cem', im: 3.4, activas: 6, ppedDirectos: 0, pped: 1 },
             ],
           },
         ],

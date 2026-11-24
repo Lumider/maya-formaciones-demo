@@ -90,7 +90,6 @@ export function SimuladorFormacion({ id }: { id: string }) {
           </div>
         }
         preguntaRitmo={hija ? `¿En cuántas campañas podría llegar ${corto} a Directora?` : `¿En cuántas campañas quieres formar a ${corto}?`}
-        etiquetasRitmo={CONFIG.simulador.etiquetasRitmoFormacion}
         preguntaInicio="¿En qué campaña empiezan?"
         ayudaInicio={`Hoy estamos en la campaña C${CONFIG.campana.actual}. El semillero puede ser esta misma semana.`}
         textoFinal="Ver su plan"
@@ -196,7 +195,7 @@ export function SimuladorFormacion({ id }: { id: string }) {
           text={`Compartir este plan con ${caso.chat.con}`}
           onfryClick={compartir}
         />
-        <fry-button hierarchy="secondary" full-width text="Probar otro ritmo" onfryClick={() => setEleccion(null)} />
+        <fry-button hierarchy="secondary" full-width text="Cambiar campañas" onfryClick={() => setEleccion(null)} />
       </div>
       {!hija && <NotaLegal tipo="bono" />}
     </div>

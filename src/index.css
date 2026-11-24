@@ -263,10 +263,32 @@ strong {
 .hoja__cabecera {
   flex: none;
 }
+.hoja__zona {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
 .hoja__cuerpo {
   flex: 1;
   min-height: 0;
   overflow-y: auto;
+}
+/* Contenido que no cabe: divisores en los cortes y barra de scroll siempre visible */
+.hoja--con-scroll .hoja__cabecera {
+  border-bottom: 1px solid var(--c-borde);
+}
+.hoja--con-scroll .hoja__pie {
+  border-top: 1px solid var(--c-borde);
+}
+.hoja__barra {
+  position: absolute;
+  right: 4px;
+  width: 4px;
+  border-radius: 4px;
+  background: rgba(28, 31, 40, 0.35);
+  pointer-events: none;
 }
 .hoja__pie {
   flex: none;

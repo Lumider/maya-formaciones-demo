@@ -79,10 +79,7 @@ export function MiCarrera() {
         <h2 className="carrera__subtitulo">Da el siguiente paso</h2>
         <button className="paso-card paso-card--directora" onClick={hablarConDirectora}>
           <span className="paso-card__texto">
-            <b>
-              <fry-icon name="whatsapp-outline" size="20" color="#ffffff" />
-              Habla con tu Directora
-            </b>
+            <b>Habla con tu Directora</b>
             <span>Ella te explica la carrera y te acompaña a tu ritmo.</span>
           </span>
           <img src={anillosWhatsapp} alt="" width={115} height={115} />

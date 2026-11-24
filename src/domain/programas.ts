@@ -1,3 +1,4 @@
+import { numeroCampana } from '../config/calendario'
 import { CONFIG, type ConsultoraGrupo, type ParticipanteEligeCrecer, type Sigla } from '../config/demo.config'
 import { dinero, dineroLocal, montoLocal, paisActivo } from './format'
 import { primerNombre } from './potencial'
@@ -34,8 +35,8 @@ export function avance(datos: { campanaInicio: number; crecimiento: number[] }):
     faltan: Math.max(0, siguiente.activas - total),
     bonoObjetivo: bonoEscalon(Math.min(logrados, EC.niveles.length - 1)),
     campanaActual: datos.crecimiento.length,
-    campanaFinal: datos.campanaInicio + EC.campanas - 1,
-    porCampana: datos.crecimiento.map((activas, i) => ({ campana: datos.campanaInicio + i, activas })).reverse(),
+    campanaFinal: numeroCampana(datos.campanaInicio + EC.campanas - 1),
+    porCampana: datos.crecimiento.map((activas, i) => ({ campana: numeroCampana(datos.campanaInicio + i), activas })).reverse(),
   }
 }
 
@@ -81,7 +82,7 @@ export function consultorasDe(sigla: Sigla): ConsultoraEvaluada[] {
         nombreNivel: CONFIG.niveles.find((n) => n.id === c.nivel)?.nombre ?? '',
         situacion,
         aviso,
-        filas: c.ventas.map((venta, i) => ({ campana: CONFIG.campana.actual - i, venta, nivel1: venta >= n1 })),
+        filas: c.ventas.map((venta, i) => ({ campana: numeroCampana(CONFIG.campana.actual - i), venta, nivel1: venta >= n1 })),
       }
     })
 }

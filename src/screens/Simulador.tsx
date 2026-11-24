@@ -35,7 +35,6 @@ export function Simulador() {
       <PreguntasPlan
         sigla={sigla}
         preguntaRitmo="¿En cuántas campañas quieres llegar a Directora?"
-        etiquetasRitmo={CONFIG.simulador.etiquetasRitmo}
         preguntaInicio="¿Cuándo quieres empezar?"
         ayudaInicio={`Hoy estamos en la campaña C${CONFIG.campana.actual}. Empezar ahora cuenta.`}
         textoFinal="Ver mi plan"
