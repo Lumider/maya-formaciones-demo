@@ -322,14 +322,14 @@ export const CONFIG = {
     },
     {
       id: 'cem',
-      nombre: 'CEM',
+      nombre: 'Consultora Emprendedora',
       descripcion: 'Además de vender, incorporas nuevas consultoras y ganas por cada una.',
       requisitos: ['Venta personal en Nivel 1 de Ganamás ({470})', '1 nueva consultora activa en Nivel 1'],
       gananciaReferencial: 600,
     },
     {
       id: 'cemSenior',
-      nombre: 'CEM Senior',
+      nombre: 'Consultora Emprendedora Senior',
       descripcion: 'Lideras tu propio grupo y ganas un porcentaje de sus ventas.',
       notaRequisitos: 'En una misma campaña:',
       requisitos: [
@@ -346,7 +346,7 @@ export const CONFIG = {
       descripcion: 'Entras al programa Fórmate como Directora, con acompañamiento de tu Directora.',
       requisitos: [
         'Venta de Grupo Personal al 60% de la meta',
-        'Mantener calificación de CEM Senior',
+        'Mantener calificación de Consultora Emprendedora Senior',
         'Morosidad dentro del límite',
         'Entrevista de postulación',
       ],
@@ -385,7 +385,7 @@ export const CONFIG = {
     CEM: {
       sigla: 'CEM',
       grupo: 'emprendedora',
-      descripcion: 'CEM — vende e incorpora nuevas consultoras',
+      descripcion: 'Consultora Emprendedora — vende e incorpora nuevas consultoras',
       gananciaActual: 440,
       nivel: 'cem',
       campana: { ventaGP: 400, activasGrupo: 1, deudaActual: 120, creditoYanbal: 807, ventaPersonal: 400 },
@@ -410,7 +410,7 @@ export const CONFIG = {
     CES: {
       sigla: 'CES',
       grupo: 'emprendedora',
-      descripcion: 'CEM Senior — lidera un grupo propio de consultoras',
+      descripcion: 'Consultora Emprendedora Senior — lidera un grupo propio de consultoras',
       gananciaActual: 970,
       nivel: 'cemSenior',
       campana: { ventaGP: 6400, activasGrupo: 6, deudaActual: 120, creditoYanbal: 807, ventaPersonal: 480 },

@@ -125,19 +125,30 @@
   position: absolute;
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 8px;
 }
 .nodo--etiqueta-derecha {
   flex-direction: row-reverse;
 }
+/* Nombre completo del nivel, en texto suelto y en varias líneas (como en el Figma) */
 .nodo__etiqueta {
-  padding: 4px 10px;
-  border: 1px solid var(--c-borde);
-  border-radius: 999px;
-  background: #fff;
-  color: #2c2f39;
+  max-width: 100px;
+  color: #1c1f28;
   font-size: 14px;
   line-height: 20px;
+  font-weight: 400;
+  text-align: left;
+}
+.nodo__aqui {
+  display: block;
+  width: fit-content;
+  margin-bottom: 2px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #fde4da;
+  color: #a83c18;
+  font-size: 12px;
+  line-height: 16px;
   font-weight: 600;
   white-space: nowrap;
 }
@@ -161,17 +172,10 @@
   border-color: #7a2e14;
   background: #dc582a;
 }
-.nodo--actual .nodo__etiqueta {
-  max-width: 132px;
-  border-color: #2c2f39;
-  background: #2c2f39;
-  color: #fff;
-  border-radius: 16px;
-  text-align: center;
-  white-space: normal;
-}
-.nodo__nivel {
-  white-space: nowrap;
+.nodo--actual .nodo__etiqueta,
+.nodo--meta .nodo__etiqueta {
+  color: #2c2f39;
+  font-weight: 600;
 }
 .nodo--meta .nodo__circulo {
   border-color: #c8963e;
@@ -201,8 +205,8 @@
   animation: nodo-pulso 1.6s ease-out infinite;
 }
 .nodo--siguiente .nodo__etiqueta {
-  border-color: #dc582a;
   color: #c94e22;
+  font-weight: 600;
 }
 @keyframes nodo-pulso {
   0% { opacity: 0.5; transform: scale(1); }

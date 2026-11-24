@@ -55,7 +55,7 @@ export function Programas() {
             <h1>Programas</h1>
             <p>
               {esDirectora
-                ? 'Hazle seguimiento a las ganancias de tus CEM y CEM Senior.'
+                ? 'Hazle seguimiento a las ganancias de tus Consultoras Emprendedoras y Consultoras Emprendedoras Senior.'
                 : 'Haz seguimiento y gana en ventas y activas de tu Grupo.'}{' '}
               <u>Ver más</u>
             </p>
@@ -102,7 +102,7 @@ export function Programas() {
             <fry-icon name="info-filled" size="16" color="#0066bf" />
             <span>
               {resumen ??
-                'Elige Crecer es para CEM y CEM Senior. Incorpora a tu primera consultora y aquí verás tu avance.'}
+                'Elige Crecer es para Consultoras Emprendedoras y Consultoras Emprendedoras Senior. Incorpora a tu primera consultora y aquí verás tu avance.'}
             </span>
           </p>
           {consultoras.filter((c) => coincide(c.nombre)).map((c) => (

@@ -42,7 +42,7 @@ export function HojaNivel({ indice, onCambiar, onCerrar, onHablar }: Props) {
           <fry-button
             hierarchy="primary"
             full-width
-            text={`Ver mi siguiente nivel: ${siguiente.nombre}`}
+            text="Ver mi siguiente nivel"
             onfryClick={() => onCambiar(actual + 1)}
           />
         ) : (

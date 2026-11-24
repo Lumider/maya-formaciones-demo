@@ -76,7 +76,8 @@ export function CaminoCarrera({ onElegir }: { onElegir: (indice: number) => void
             <span className="nodo__etiqueta">
               {estado === 'actual' ? (
                 <>
-                  Estás aquí · <span className="nodo__nivel">{nivel.nombre}</span>
+                  <span className="nodo__aqui">Estás aquí</span>
+                  {nivel.nombre}
                 </>
               ) : (
                 nivel.nombre

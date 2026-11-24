@@ -43,7 +43,7 @@ export function directorasHijas(): DirectoraEvaluada[] {
       return {
         ...d,
         emprendedoras,
-        aviso: `Tiene ${cemSenior} CEM Senior y ${pactadas} ${pactadas === 1 ? 'formación pactada' : 'formaciones pactadas'} en su plan de negocio.`,
+        aviso: `Tiene ${cemSenior} ${cemSenior === 1 ? 'Consultora Emprendedora Senior' : 'Consultoras Emprendedoras Senior'} y ${pactadas} ${pactadas === 1 ? 'formación pactada' : 'formaciones pactadas'} en su plan de negocio.`,
       }
     })
     .sort((a, b) => contar(b, 'alto') - contar(a, 'alto'))
