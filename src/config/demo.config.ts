@@ -593,11 +593,11 @@ export const CONFIG = {
       { etiqueta: 'Cuadrante', valor: 'A', icono: 'cuadrante' },
       { etiqueta: 'Crédito Yanbal', valor: 27000, moneda: true, icono: 'credito' },
     ] as { etiqueta: string; valor: string | number; moneda?: boolean; icono: string }[],
-    /** Accesos de "Mis Directoras" que no funcionan en la demo, con su contador fijo. */
-    accesosFueraDeAlcance: [
+    /** Accesos de "Mis Directoras" con su contador fijo. Solo "Con Aspirante" entra a Emprendedoras; el resto está fuera del alcance de la demo. */
+    accesos: [
       { etiqueta: 'Cuadrante D', contador: 2 },
       { etiqueta: 'No logra meta', contador: 10 },
-      { etiqueta: 'Con Aspirante', contador: 1 },
+      { etiqueta: 'Con Aspirante', contador: 1, abreEmprendedoras: true },
       { etiqueta: 'Sin CEM/CES', contador: 1 },
       { etiqueta: 'Sin Estrella', contador: 1 },
     ],
@@ -647,12 +647,12 @@ export const CONFIG = {
           {
             id: 'maria-mercedes',
             nombre: 'María Mercedes',
-            intencion: 'noRegistro',
+            intencion: 'quiere',
             historial: [
-              { campana: c(0), ventaGP: 920, califica: 'consultora', im: 4.1, activas: 3, ppedDirectos: 0, pped: 0 },
-              { campana: c(-1), ventaGP: 1100, califica: 'consultora', im: 3.8, activas: 3, ppedDirectos: 0, pped: 0 },
-              { campana: c(-2), ventaGP: 870, califica: 'consultora', im: 4.4, activas: 2, ppedDirectos: 0, pped: 0 },
-              { campana: c(-3), ventaGP: 990, califica: 'consultora', im: 4.0, activas: 3, ppedDirectos: 0, pped: 1 },
+              { campana: c(0), ventaGP: 6800, califica: 'cem', im: 4.1, activas: 5, ppedDirectos: 1, pped: 1 },
+              { campana: c(-1), ventaGP: 6100, califica: 'cem', im: 3.8, activas: 5, ppedDirectos: 0, pped: 1 },
+              { campana: c(-2), ventaGP: 4900, califica: 'consultora', im: 4.4, activas: 4, ppedDirectos: 0, pped: 0 },
+              { campana: c(-3), ventaGP: 4200, califica: 'consultora', im: 4.0, activas: 4, ppedDirectos: 0, pped: 0 },
             ],
           },
         ],

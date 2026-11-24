@@ -1,26 +1,29 @@
-import { CONFIG, type DirectoraHija, type Emprendedora, type RegistroCampana } from '../config/demo.config'
+import { CONFIG, type DirectoraHija, type Emprendedora, type NivelId, type RegistroCampana } from '../config/demo.config'
 import { ORDEN_POTENCIAL, potencial, primerNombre, type Potencial } from './potencial'
+import { siglaDeNivel } from './simulador'
 
 export interface EmprendedoraEvaluada extends Emprendedora {
   /** Campaña actual: lo que muestra la card y la primera columna de "Ver crecimiento". */
   actual: RegistroCampana
   potencial: Potencial
-  nombreNivel: string
+  /** La Líder ve los estatus por su sigla (CNS, CEM, CES). */
+  sigla: string
 }
 
 export interface DirectoraEvaluada extends Omit<DirectoraHija, 'emprendedoras'> {
   emprendedoras: EmprendedoraEvaluada[]
-  /** Aviso calculado: "Tiene n CEM Senior y m formación pactada en su plan de negocio." */
+  /** Aviso calculado: "Tiene n CES y m formación pactada en su plan de negocio." */
   aviso: string
 }
 
-export function nombreNivel(id: string): string {
-  return CONFIG.niveles.find((n) => n.id === id)?.nombre ?? ''
+/** Sigla del estatus con el que califica (la Líder los ve abreviados). */
+export function siglaNivel(id: NivelId): string {
+  return siglaDeNivel(id)
 }
 
 function evaluar(e: Emprendedora): EmprendedoraEvaluada {
   const actual = e.historial[0]
-  return { ...e, actual, potencial: potencial(actual, e.intencion), nombreNivel: nombreNivel(actual.califica) }
+  return { ...e, actual, potencial: potencial(actual, e.intencion), sigla: siglaNivel(actual.califica) }
 }
 
 function contar(d: { emprendedoras: EmprendedoraEvaluada[] }, p: Potencial): number {
@@ -43,15 +46,10 @@ export function directorasHijas(): DirectoraEvaluada[] {
       return {
         ...d,
         emprendedoras,
-        aviso: `Tiene ${cemSenior} ${cemSenior === 1 ? 'Consultora Emprendedora Senior' : 'Consultoras Emprendedoras Senior'} y ${pactadas} ${pactadas === 1 ? 'formación pactada' : 'formaciones pactadas'} en su plan de negocio.`,
+        aviso: `Tiene ${cemSenior} CES y ${pactadas} ${pactadas === 1 ? 'formación pactada' : 'formaciones pactadas'} en su plan de negocio.`,
       }
     })
     .sort((a, b) => contar(b, 'alto') - contar(a, 'alto'))
-}
-
-/** Contador del acceso "Potencial alto": Directoras hijas con al menos una emprendedora de potencial alto. */
-export function directorasConPotencialAlto(): number {
-  return directorasHijas().filter((d) => contar(d, 'alto') > 0).length
 }
 
 function enumerar(nombres: string[]): string {

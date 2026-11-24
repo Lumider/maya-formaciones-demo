@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { CONFIG } from '../../config/demo.config'
-import { directorasConPotencialAlto } from '../../domain/lideres'
 import { dinero } from '../../domain/format'
 import { navegar, RUTAS } from '../../state/router'
 import { useDemo } from '../../state/store'
@@ -32,14 +31,14 @@ const ACCESOS = [
 
 const PESTANAS = ['Mis Directoras', 'Grupo Personal'] as const
 
-/** Home de la Líder (SSE y REG): sin barra inferior; entra a Emprendedoras desde "Potencial alto". */
+/** Home de la Líder (SSE y REG): sin barra inferior; entra a Emprendedoras desde "Con Aspirante". */
 export function HomeLider() {
   const { sesion, avisar, elegirFiltroEmprendedoras } = useDemo()
   const [pestana, setPestana] = useState<(typeof PESTANAS)[number]>('Mis Directoras')
   const fueraDeAlcance = () => avisar('Fuera del alcance de esta demo')
 
-  const verPotencialAlto = () => {
-    elegirFiltroEmprendedoras('alto')
+  const verEmprendedoras = () => {
+    elegirFiltroEmprendedoras(null)
     navegar(RUTAS.emprendedoras)
   }
 
@@ -98,22 +97,15 @@ export function HomeLider() {
       </div>
 
       <ul className="accesos-lider">
-        {CONFIG.lideres.accesosFueraDeAlcance.map((a) => (
+        {CONFIG.lideres.accesos.map((a) => (
           <li key={a.etiqueta}>
-            <button className="acceso-lider" onClick={fueraDeAlcance}>
+            <button className="acceso-lider" onClick={a.abreEmprendedoras ? verEmprendedoras : fueraDeAlcance}>
               <span className="acceso-lider__contador">{a.contador}</span>
               <span className="acceso-lider__etiqueta">{a.etiqueta}</span>
               <fry-icon name="chevron-right-outline" size="16" />
             </button>
           </li>
         ))}
-        <li>
-          <button className="acceso-lider" onClick={verPotencialAlto}>
-            <span className="acceso-lider__contador">{directorasConPotencialAlto()}</span>
-            <span className="acceso-lider__etiqueta">Potencial alto</span>
-            <fry-icon name="chevron-right-outline" size="16" />
-          </button>
-        </li>
       </ul>
     </>
   )

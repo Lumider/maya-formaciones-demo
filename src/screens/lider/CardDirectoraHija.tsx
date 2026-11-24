@@ -3,7 +3,6 @@ import { EtiquetaPotencial } from '../../components/EtiquetaPotencial'
 import type { DirectoraEvaluada, EmprendedoraEvaluada } from '../../domain/lideres'
 import { dinero } from '../../domain/format'
 import { primerNombre, TEXTO_INTENCION } from '../../domain/potencial'
-import { navegar, RUTAS } from '../../state/router'
 import { useDemo } from '../../state/store'
 
 interface Props {
@@ -69,22 +68,15 @@ export function CardDirectoraHija({ directora, abiertaPorDefecto, onContactar, o
                   size="16"
                   color={e.actual.califica === 'consultora' ? '#ce8700' : '#407d7d'}
                 />
-                Califica como {e.nombreNivel}
+                Califica como {e.sigla}
               </p>
-              <p>{TEXTO_INTENCION[e.intencion]}</p>
+              {e.intencion === 'quiere' && <p>{TEXTO_INTENCION[e.intencion]}</p>}
               <p>Venta GP: {dinero(e.actual.ventaGP)}</p>
               <p>Total de Activas: {e.actual.activas}</p>
               <p>PPED: {e.actual.pped}</p>
               <p>IM: {e.actual.im.toFixed(1)}%</p>
               <div className="emprendedora__acciones">
-                <fry-button
-                  hierarchy="primary"
-                  size="small"
-                  full-width
-                  text="Simular crecimiento"
-onfryClick={() => navegar(RUTAS.simuladorFormacion + e.id)}
-                />
-                <fry-button hierarchy="secondary" size="small" full-width text="Ver crecimiento" onfryClick={() => onVerCrecimiento(e)} />
+                <fry-button hierarchy="link" size="small" text="Ver crecimiento" icon-right="arrow-up-right-outline" onfryClick={() => onVerCrecimiento(e)} />
               </div>
             </li>
           ))}

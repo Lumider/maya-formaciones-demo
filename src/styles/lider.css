@@ -188,12 +188,8 @@
 .emprendedora__acciones {
   align-self: stretch;
   display: flex;
-  gap: 8px;
+  justify-content: flex-end;
   margin-top: 4px;
-}
-.emprendedora__acciones fry-button {
-  flex: 1 1 0;
-  min-width: 0;
 }
 
 /* Hoja de filtro por potencial */

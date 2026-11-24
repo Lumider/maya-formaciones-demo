@@ -1,5 +1,5 @@
 import { HojaInferior } from '../../components/HojaInferior'
-import { nombreNivel, type EmprendedoraEvaluada } from '../../domain/lideres'
+import { siglaNivel, type EmprendedoraEvaluada } from '../../domain/lideres'
 import { dinero } from '../../domain/format'
 
 interface Props {
@@ -16,7 +16,7 @@ export function HojaCrecimiento({ emprendedora, directora, ventaGPDirectora, onC
   const filas: { titulo: string; celdas: (string | { etiqueta: string })[] }[] = [
     { titulo: 'Venta GP de su Directora', celdas: campanas.map((_, i) => dinero(ventaGPDirectora[i] ?? 0)) },
     { titulo: 'Venta GP', celdas: campanas.map((c) => dinero(c.ventaGP)) },
-    { titulo: 'Califica', celdas: campanas.map((c) => ({ etiqueta: nombreNivel(c.califica) })) },
+    { titulo: 'Califica', celdas: campanas.map((c) => ({ etiqueta: siglaNivel(c.califica) })) },
     { titulo: 'IM', celdas: campanas.map((c) => `${c.im.toFixed(1)}%`) },
     { titulo: 'Activas', celdas: campanas.map((c) => String(c.activas)) },
     { titulo: 'PPED directos', celdas: campanas.map((c) => String(c.ppedDirectos)) },
@@ -28,7 +28,7 @@ export function HojaCrecimiento({ emprendedora, directora, ventaGPDirectora, onC
       <div className="crecimiento">
         <h2 className="flujo__titulo">{emprendedora.nombre}</h2>
         <p className="crecimiento__detalle">
-          Califica como {emprendedora.nombreNivel} · Directora: {directora}
+          Califica como {emprendedora.sigla} · Directora: {directora}
         </p>
         <div className="crecimiento__tabla">
           <table>
