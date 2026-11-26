@@ -18,8 +18,7 @@
   --c-ambar: #b7791f;
   --c-rojo: #c0392b;
   --fuente: var(--fry-f-text-style-font-family, 'Maison Neue'), 'Helvetica Neue', Arial, system-ui, sans-serif;
-  --fuente-nav: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  --alto-nav: 62px;
+  --alto-nav: 80px;
   --sombra-hoja: 0 -8px 32px rgba(28, 31, 40, 0.18);
 }
 
@@ -195,14 +194,15 @@ strong {
   height: 16px;
 }
 
-/* ---------- Navegación inferior ---------- */
+/* ---------- Navegación inferior (NavBar del Figma) ---------- */
 .nav {
   flex: none;
   display: flex;
-  align-items: center;
-  padding: 8px 0 calc(8px + env(safe-area-inset-bottom));
-  background: var(--c-fondo);
-  border-top: 1px solid #e7e0d8;
+  align-items: stretch;
+  min-height: var(--alto-nav);
+  padding-bottom: env(safe-area-inset-bottom);
+  background: linear-gradient(173deg, #f39b7d 2.4%, var(--c-naranja) 97.6%);
+  border-top: 2px solid rgba(237, 237, 237, 0.14);
 }
 .nav__item {
   flex: 1 0 0;
@@ -211,18 +211,18 @@ strong {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 6px 0;
-  border-radius: 12px;
-  font-family: var(--fuente-nav);
-  font-size: 11px;
-  line-height: 13px;
+  gap: 8px;
+  padding: 14px 0;
+  border-bottom: 4px solid transparent;
+  font-size: 12px;
+  line-height: normal;
   letter-spacing: 0;
-  color: #242424;
+  color: #fff;
   white-space: nowrap;
 }
 .nav__icono {
-  width: 42px;
-  height: 27px;
+  width: 20px;
+  height: 20px;
   display: grid;
   place-items: center;
 }
@@ -230,13 +230,10 @@ strong {
   width: 20px;
   height: 20px;
 }
-.nav__icono--ancho img {
-  width: 42px;
-  height: 27px;
-}
 .nav__item--activa {
-  background: var(--c-fondo-hueso);
-  font-weight: 700;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.3));
+  border-bottom-color: #0071d0;
+  font-weight: 600;
 }
 
 /* ---------- Hoja inferior ---------- */

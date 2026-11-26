@@ -159,6 +159,8 @@ export interface Perfil {
 }
 
 export const CONFIG = {
+  /** Versión de la demo; se muestra en la etiqueta de Configurar demo. */
+  version: 'v2',
   paisPorDefecto: 'PE' as Pais,
   paises: {
     PE: { nombre: 'Perú', simbolo: 'S/', separadorMiles: ',', moneda: 'PEN', factor: 1, montosAdaptados: {} },

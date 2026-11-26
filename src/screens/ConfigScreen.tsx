@@ -32,7 +32,7 @@ export function ConfigScreen() {
 
   return (
     <main className="pantalla config">
-      <span className="config__demo">DEMO</span>
+      <span className="config__demo">DEMO {CONFIG.version}</span>
       <h1 className="t-titulo">Configurar demo</h1>
       <p className="t-sutil config__ayuda">Completa esto antes de entregar el celular a la participante.</p>
 

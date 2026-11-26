@@ -1,21 +1,22 @@
 import { navegar, RUTAS } from '../state/router'
 import { useDemo } from '../state/store'
-import inicio from '../assets/figma/home/nav-house.svg'
-import negocio from '../assets/figma/home/nav-briefcase.svg'
-import grupos from '../assets/figma/home/nav-users.svg'
-import programas from '../assets/figma/home/nav-award.svg'
-import carrera from '../assets/figma/home/nav-carrera.svg'
-import carreraActiva from '../assets/figma/mi-carrera-sin/nav-carrera-active.svg'
+import inicio from '../assets/figma/nav/nav-house.svg'
+import negocio from '../assets/figma/nav/nav-briefcase.svg'
+import grupos from '../assets/figma/nav/nav-users.svg'
+import programas from '../assets/figma/nav/nav-award.svg'
+import carrera from '../assets/figma/nav/nav-carrera.svg'
 
 interface Item {
   etiqueta: string
   ruta: string
   icono: string
-  iconoActivo?: string
-  ancho?: boolean
 }
 
-/** Barra inferior. La quinta pestaña depende del perfil: "Mi carrera" o "Formaciones". */
+/**
+ * Barra inferior (frame "NavBar" del Figma): fondo degradado naranja, iconos y textos blancos,
+ * y la pestaña activa con un velo claro y una línea azul abajo. La quinta pestaña depende del
+ * perfil: "Mi carrera" o "Formaciones".
+ */
 export function NavInferior({ ruta }: { ruta: string }) {
   const { perfil } = useDemo()
   const quinta =
@@ -27,7 +28,7 @@ export function NavInferior({ ruta }: { ruta: string }) {
     { etiqueta: 'Mi Negocio', ruta: RUTAS.miNegocio, icono: negocio },
     { etiqueta: 'Mis Grupos', ruta: RUTAS.misGrupos, icono: grupos },
     { etiqueta: 'Programas', ruta: RUTAS.programas, icono: programas },
-    { ...quinta, icono: carrera, iconoActivo: carreraActiva, ancho: true },
+    { ...quinta, icono: carrera },
   ]
   return (
     <nav className="nav" aria-label="Navegación principal">
@@ -40,8 +41,8 @@ export function NavInferior({ ruta }: { ruta: string }) {
             aria-current={activa ? 'page' : undefined}
             onClick={() => navegar(item.ruta)}
           >
-            <span className={`nav__icono ${item.ancho ? 'nav__icono--ancho' : ''}`}>
-              <img src={activa && item.iconoActivo ? item.iconoActivo : item.icono} alt="" />
+            <span className="nav__icono">
+              <img src={item.icono} alt="" />
             </span>
             {item.etiqueta}
           </button>
